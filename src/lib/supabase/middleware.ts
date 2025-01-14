@@ -38,10 +38,17 @@ export async function updateSession(request: NextRequest) {
   // Handle OAuth callback
   if (request.nextUrl.pathname === "/auth/callback") {
     const { error } = await supabase.auth.exchangeCodeForSession(request.url);
+    const url = request.nextUrl.clone();
     if (error) {
-      return NextResponse.redirect("/signin");
+      url.pathname = "/signin";
+      return NextResponse.rewrite(url);
     }
-    return NextResponse.redirect("/");
+    // Ensure session is updated before redirecting
+    supabaseResponse = NextResponse.next({
+      request,
+    });
+    url.pathname = "/dashboard";
+    return NextResponse.rewrite(url);
   }
 
   // Redirect unauthenticated users to sign-in page
@@ -59,7 +66,7 @@ export async function updateSession(request: NextRequest) {
   // Redirect authenticated users attempting to access the sign-in page to the home page
   if (user && request.nextUrl.pathname.startsWith("/signin")) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
