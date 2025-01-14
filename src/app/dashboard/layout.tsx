@@ -36,6 +36,7 @@ export default function DashboardLayout({
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
+            {/* Make sure to move breadcrumbs out to its own component, so we can use the dashboard as a server component */}
             <Breadcrumb>
               <BreadcrumbList>
                 {pathSegments.map((segment, index) => (
