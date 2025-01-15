@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Command, LifeBuoy, SquareTerminal } from "lucide-react";
+import { Command, LifeBuoy, SquareTerminal, UserRoundPen } from "lucide-react";
 
 import { NavMain } from "@/components/Navigation/nav-main";
 import { NavSecondary } from "@/components/Navigation/nav-secondary";
@@ -24,11 +24,16 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
     },
+    {
+      title: "Profile",
+      url: "/dashboard/profile",
+      icon: UserRoundPen,
+    },
   ],
   navSecondary: [
     {
       title: "Support",
-      url: "#",
+      url: "/dashboard/support",
       icon: LifeBuoy,
     },
   ],
