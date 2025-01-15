@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Profile } from "@/types/profile";
-import { getCountryEmoji } from "@/app/utils/getCountryEmoji";
+import { getCountryEmoji } from "../utils/getCountryEmoji";
 
 export const columns: ColumnDef<Profile>[] = [
   {
@@ -80,6 +80,9 @@ export const columns: ColumnDef<Profile>[] = [
   {
     accessorKey: "timezone",
     header: "Timezone",
+    cell: ({ row }) => (
+      <span className="uppercase">{row.original.timezone}</span>
+    ),
   },
   {
     accessorKey: "current_project",

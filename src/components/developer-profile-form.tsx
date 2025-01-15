@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import {
   Select,
   SelectContent,
@@ -29,54 +28,20 @@ import { useSession } from "@/hooks/useSession";
 import { createClient } from "@/lib/supabase/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-
-const formSchema = z.object({
-  auth_user_id: z.string().uuid(),
-  name: z.string(),
-  job_title: z.string().min(2, {
-    message: "Job title must be at least 2 characters.",
-  }),
-  email: z.string().email(),
-  years_of_experience: z.number().int().positive(),
-  tools: z.string().min(1, {
-    message: "Please select at least one tool.",
-  }),
-  programming_languages: z.string().min(1, {
-    message: "Please select at least one programming language.",
-  }),
-  applications_services: z.string().min(1, {
-    message: "Please select at least one application or service.",
-  }),
-  spoken_languages: z.string().min(1, {
-    message: "Please select at least one spoken language.",
-  }),
-  timezone: z.string(),
-  current_project: z.string().nullable(),
-  availability: z.enum(["available", "unavailable"]),
-});
+import { defaultValues } from "@/types/form";
+import { formSchema } from "@/schemas/formSchema";
+import { useProfileOperations } from "@/hooks/useProfileOperations";
 
 export function DeveloperProfileForm() {
   const session = useSession();
   const supabase = createClient();
   const { toast } = useToast();
+  const { handleProfileSubmission } = useProfileOperations(supabase, toast);
   const [isMounted, setIsMounted] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      auth_user_id: "",
-      name: "",
-      email: "",
-      job_title: "",
-      years_of_experience: 0,
-      tools: "",
-      programming_languages: "",
-      applications_services: "",
-      spoken_languages: "",
-      timezone: "",
-      current_project: null,
-      availability: undefined,
-    },
+    defaultValues,
   });
 
   useEffect(() => {
@@ -121,82 +86,7 @@ export function DeveloperProfileForm() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Convert availability to boolean
-    const availabilityBoolean = values.availability === "available";
-
-    // Sanitize input fields
-    const sanitizedValues = {
-      ...values,
-      tools: values.tools
-        .split(",")
-        .map((tool) => tool.trim())
-        .filter((tool) => tool),
-      programming_languages: values.programming_languages
-        .split(",")
-        .map((lang) => lang.trim())
-        .filter((lang) => lang),
-      applications_services: values.applications_services
-        .split(",")
-        .map((service) => service.trim())
-        .filter((service) => service),
-      spoken_languages: values.spoken_languages
-        .split(",")
-        .map((lang) => lang.trim())
-        .filter((lang) => lang),
-    };
-
-    const { data } = await supabase
-      .from("profiles")
-      .select("auth_user_id")
-      .eq("auth_user_id", sanitizedValues.auth_user_id)
-      .single();
-
-    if (data) {
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          ...sanitizedValues,
-          availability: availabilityBoolean,
-        })
-        .eq("auth_user_id", sanitizedValues.auth_user_id);
-
-      if (error) {
-        toast({
-          title: "Error",
-          description: "There was an error updating the profile.",
-          variant: "destructive",
-        });
-        console.error("Error updating data:", error);
-      } else {
-        toast({
-          title: "Success",
-          description: "Profile updated successfully.",
-        });
-        console.log("Data updated successfully");
-      }
-    } else {
-      const { error } = await supabase.from("profiles").insert([
-        {
-          ...sanitizedValues,
-          availability: availabilityBoolean,
-        },
-      ]);
-
-      if (error) {
-        toast({
-          title: "Error",
-          description: "There was an error submitting the form.",
-          variant: "destructive",
-        });
-        console.error("Error inserting data:", error);
-      } else {
-        toast({
-          title: "Success",
-          description: "Profile created successfully.",
-        });
-        console.log("Data inserted successfully");
-      }
-    }
+    await handleProfileSubmission(values);
   }
 
   return (
@@ -462,10 +352,7 @@ export function DeveloperProfileForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Availability</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value} // Ensure correct value is set
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select your availability" />
