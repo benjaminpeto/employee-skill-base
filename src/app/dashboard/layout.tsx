@@ -16,6 +16,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/toaster";
 import React from "react";
 
 export default function DashboardLayout({
@@ -72,6 +73,7 @@ export default function DashboardLayout({
             {children}
           </div>
         </div>
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

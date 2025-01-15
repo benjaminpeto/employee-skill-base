@@ -25,7 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "@/hooks/useSession";
 import { createClient } from "@/lib/supabase/supabaseClient";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 
 const formSchema = z.object({
@@ -56,6 +56,7 @@ const formSchema = z.object({
 export function DeveloperProfileForm() {
   const session = useSession();
   const supabase = createClient();
+  const { toast } = useToast();
   const [isMounted, setIsMounted] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -118,8 +119,6 @@ export function DeveloperProfileForm() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Submitting form with values:", values);
-
     // Convert availability to boolean
     const availabilityBoolean = values.availability === "available";
 
