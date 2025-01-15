@@ -1,3 +1,4 @@
+import { UseFormReturn } from "react-hook-form";
 import * as z from "zod";
 
 export const formSchema = z.object({
@@ -24,3 +25,7 @@ export const formSchema = z.object({
   current_project: z.string().nullable(),
   availability: z.enum(["available", "unavailable"]),
 });
+
+export interface FormFieldsProps {
+  form: UseFormReturn<z.infer<typeof formSchema>>;
+}
