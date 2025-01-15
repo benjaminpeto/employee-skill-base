@@ -23,58 +23,179 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useSession } from "@/hooks/useSession";
+import { createClient } from "@/lib/supabase/supabaseClient";
+import { toast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   auth_user_id: z.string().uuid(),
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
+  name: z.string(),
   job_title: z.string().min(2, {
     message: "Job title must be at least 2 characters.",
   }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
+  email: z.string().email(),
   years_of_experience: z.number().int().positive(),
-  tools: z.array(z.string()).min(1, {
+  tools: z.string().min(1, {
     message: "Please select at least one tool.",
   }),
-  programming_languages: z.array(z.string()).min(1, {
+  programming_languages: z.string().min(1, {
     message: "Please select at least one programming language.",
   }),
-  applications_services: z.array(z.string()).min(1, {
+  applications_services: z.string().min(1, {
     message: "Please select at least one application or service.",
   }),
-  spoken_languages: z.array(z.string()).min(1, {
+  spoken_languages: z.string().min(1, {
     message: "Please select at least one spoken language.",
   }),
   timezone: z.string(),
   current_project: z.string().nullable(),
-  availability: z.enum(["available", "unavailable", "limited"]),
+  availability: z.enum(["available", "unavailable"]),
 });
 
 export function DeveloperProfileForm() {
+  const session = useSession();
+  const supabase = createClient();
+  const [isMounted, setIsMounted] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      auth_user_id: "", // This should be populated with the actual user ID
+      auth_user_id: "",
       name: "",
-      job_title: "",
       email: "",
+      job_title: "",
       years_of_experience: 0,
-      tools: [],
-      programming_languages: [],
-      applications_services: [],
-      spoken_languages: [],
+      tools: "",
+      programming_languages: "",
+      applications_services: "",
+      spoken_languages: "",
       timezone: "",
       current_project: null,
       availability: "unavailable",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Handle form submission here
-    console.log(values);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (session && isMounted) {
+      const fetchProfile = async () => {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("auth_user_id", session.user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile:", error);
+        } else if (data) {
+          form.reset({
+            auth_user_id: data.auth_user_id,
+            name: data.name || session.user.user_metadata.full_name,
+            email: data.email || session.user.email,
+            job_title: data.job_title,
+            years_of_experience: data.years_of_experience,
+            tools: data.tools.join(", "),
+            programming_languages: data.programming_languages.join(", "),
+            applications_services: data.applications_services.join(", "),
+            spoken_languages: data.spoken_languages.join(", "),
+            timezone: data.timezone,
+            current_project: data.current_project,
+            availability: data.availability ? "available" : "unavailable",
+          });
+        }
+      };
+
+      fetchProfile();
+    }
+  }, [session, form, supabase, isMounted]);
+
+  if (!isMounted) {
+    return null;
+  }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("Submitting form with values:", values);
+
+    // Convert availability to boolean
+    const availabilityBoolean = values.availability === "available";
+
+    // Sanitize input fields
+    const sanitizedValues = {
+      ...values,
+      tools: values.tools
+        .split(",")
+        .map((tool) => tool.trim())
+        .filter((tool) => tool),
+      programming_languages: values.programming_languages
+        .split(",")
+        .map((lang) => lang.trim())
+        .filter((lang) => lang),
+      applications_services: values.applications_services
+        .split(",")
+        .map((service) => service.trim())
+        .filter((service) => service),
+      spoken_languages: values.spoken_languages
+        .split(",")
+        .map((lang) => lang.trim())
+        .filter((lang) => lang),
+    };
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("auth_user_id")
+      .eq("auth_user_id", sanitizedValues.auth_user_id)
+      .single();
+
+    if (data) {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          ...sanitizedValues,
+          availability: availabilityBoolean,
+        })
+        .eq("auth_user_id", sanitizedValues.auth_user_id);
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "There was an error updating the profile.",
+          variant: "destructive",
+        });
+        console.error("Error updating data:", error);
+      } else {
+        toast({
+          title: "Success",
+          description: "Profile updated successfully.",
+        });
+        console.log("Data updated successfully");
+      }
+    } else {
+      const { error } = await supabase.from("profiles").insert([
+        {
+          ...sanitizedValues,
+          availability: availabilityBoolean,
+        },
+      ]);
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "There was an error submitting the form.",
+          variant: "destructive",
+        });
+        console.error("Error inserting data:", error);
+      } else {
+        toast({
+          title: "Success",
+          description: "Profile created successfully.",
+        });
+        console.log("Data inserted successfully");
+      }
+    }
   }
 
   return (
@@ -88,20 +209,7 @@ export function DeveloperProfileForm() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="job_title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="Senior Developer" {...field} />
+                  <Input placeholder="John Doe" {...field} disabled />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -118,7 +226,21 @@ export function DeveloperProfileForm() {
                     type="email"
                     placeholder="john@example.com"
                     {...field}
+                    disabled
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="job_title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Senior Developer" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -146,19 +268,11 @@ export function DeveloperProfileForm() {
           <FormField
             control={form.control}
             name="tools"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Tools</FormLabel>
                 <FormControl>
-                  <Textarea
-                    value={form.watch("tools").join(", ")}
-                    onChange={(e) =>
-                      form.setValue(
-                        "tools",
-                        e.target.value.split(",").map((tool) => tool.trim())
-                      )
-                    }
-                  />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormDescription>
                   Enter the tools you use, separated by commas.
@@ -170,19 +284,11 @@ export function DeveloperProfileForm() {
           <FormField
             control={form.control}
             name="programming_languages"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Programming Languages</FormLabel>
                 <FormControl>
-                  <Textarea
-                    value={form.watch("programming_languages").join(", ")}
-                    onChange={(e) =>
-                      form.setValue(
-                        "programming_languages",
-                        e.target.value.split(",").map((lang) => lang.trim())
-                      )
-                    }
-                  />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormDescription>
                   Enter the programming languages you know, separated by commas.
@@ -194,21 +300,11 @@ export function DeveloperProfileForm() {
           <FormField
             control={form.control}
             name="applications_services"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Applications/Services</FormLabel>
                 <FormControl>
-                  <Textarea
-                    value={form.watch("applications_services").join(", ")}
-                    onChange={(e) =>
-                      form.setValue(
-                        "applications_services",
-                        e.target.value
-                          .split(",")
-                          .map((service) => service.trim())
-                      )
-                    }
-                  />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormDescription>
                   Enter the applications or services you&apos;re familiar with,
@@ -221,19 +317,11 @@ export function DeveloperProfileForm() {
           <FormField
             control={form.control}
             name="spoken_languages"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Spoken Languages</FormLabel>
                 <FormControl>
-                  <Textarea
-                    value={form.watch("spoken_languages").join(", ")}
-                    onChange={(e) =>
-                      form.setValue(
-                        "spoken_languages",
-                        e.target.value.split(",").map((lang) => lang.trim())
-                      )
-                    }
-                  />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormDescription>
                   Enter the languages you speak, separated by commas.
@@ -290,9 +378,6 @@ export function DeveloperProfileForm() {
                   <SelectContent>
                     <SelectItem value="available">Available</SelectItem>
                     <SelectItem value="unavailable">Unavailable</SelectItem>
-                    <SelectItem value="limited">
-                      Limited Availability
-                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

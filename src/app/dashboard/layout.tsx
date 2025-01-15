@@ -16,6 +16,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import React from "react";
 
 export default function DashboardLayout({
   children,
@@ -40,9 +41,9 @@ export default function DashboardLayout({
             <Breadcrumb>
               <BreadcrumbList>
                 {pathSegments.map((segment, index) => (
-                  <BreadcrumbItem key={index}>
-                    {index < pathSegments.length - 1 ? (
-                      <>
+                  <React.Fragment key={index}>
+                    <BreadcrumbItem>
+                      {index < pathSegments.length - 1 ? (
                         <BreadcrumbLink
                           href={`/${pathSegments
                             .slice(0, index + 1)
@@ -50,12 +51,12 @@ export default function DashboardLayout({
                         >
                           {capitalize(segment)}
                         </BreadcrumbLink>
-                        <BreadcrumbSeparator />
-                      </>
-                    ) : (
-                      <BreadcrumbPage>{capitalize(segment)}</BreadcrumbPage>
-                    )}
-                  </BreadcrumbItem>
+                      ) : (
+                        <BreadcrumbPage>{capitalize(segment)}</BreadcrumbPage>
+                      )}
+                    </BreadcrumbItem>
+                    {index < pathSegments.length - 1 && <BreadcrumbSeparator />}
+                  </React.Fragment>
                 ))}
               </BreadcrumbList>
             </Breadcrumb>
