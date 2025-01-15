@@ -1,4 +1,4 @@
-import { DeveloperProfileForm } from "@/components/developer-profile-form";
+import { DeveloperProfileForm } from "@/components/Form/developer-profile-form";
 
 export default function Page() {
   return (

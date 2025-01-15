@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/supabaseClient";
 
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/Icons";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useSearchParams } from "next/navigation";
