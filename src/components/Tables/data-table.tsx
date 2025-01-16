@@ -159,7 +159,7 @@ export default function DataTable() {
         >
           Previous
         </Button>
-        <span>
+        <span className="text-sm text-gray-400">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </span>

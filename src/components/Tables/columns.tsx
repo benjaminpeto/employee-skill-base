@@ -76,11 +76,11 @@ export const columns: ColumnDef<Profile>[] = [
     accessorKey: "spoken_languages",
     header: "Spoken Languages",
     cell: ({ row }) => (
-      <div className="flex flex-wrap gap-1">
+      <div className="flex flex-wrap gap-1 w-[120px]">
         {row.original.spoken_languages.map((language) => (
           <span
             key={language}
-            className="inline-block px-3 rounded-full text-sm text-gray-700 bg-gray-200 border border-gray-700"
+            className="inline-block px-3 rounded-full text-xs text-gray-900 bg-gray-300/80 border border-gray-900"
           >
             {getCountryEmoji(language)}{" "}
             {language
@@ -115,7 +115,7 @@ export const columns: ColumnDef<Profile>[] = [
     header: "Availability",
     cell: ({ row }) => (
       <span
-        className={`inline-block px-3 rounded-full text-sm ${
+        className={`inline-block px-3 py-1 rounded-full text-xs ${
           row.original.availability
             ? "text-green-700 bg-green-200 border border-green-700"
             : "text-red-700 bg-red-200 border border-red-700"
