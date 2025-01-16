@@ -20,10 +20,12 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  PaginationState,
   useReactTable,
 } from "@tanstack/react-table";
-import Filter from "./filter";
 import { arrIncludes, isAvailable } from "./utils";
+import FiltersContainer from "./filters-container";
+import { Button } from "@/components/ui/button";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,6 +37,10 @@ declare module "@tanstack/react-table" {
 export default function DataTable() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const supabase = createClient();
   const { toast } = useToast();
 
@@ -59,6 +65,10 @@ export default function DataTable() {
 
   const memoizedColumns = useMemo(() => columns, []);
 
+  const clearFilters = () => {
+    table.resetColumnFilters();
+  };
+
   const table = useReactTable({
     data: profiles,
     columns: memoizedColumns,
@@ -68,8 +78,10 @@ export default function DataTable() {
     },
     state: {
       columnFilters,
+      pagination,
     },
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(), //client side filtering
     getSortedRowModel: getSortedRowModel(),
@@ -81,6 +93,10 @@ export default function DataTable() {
 
   return (
     <div className="container mx-auto p-4">
+      <FiltersContainer
+        columns={table.getAllColumns()}
+        clearFilters={clearFilters}
+      />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -89,30 +105,23 @@ export default function DataTable() {
                 return (
                   <TableHead key={header.id}>
                     {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          {...{
-                            className: header.column.getCanSort()
-                              ? "cursor-pointer select-none"
-                              : "",
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: " 🔼",
-                            desc: " 🔽",
-                          }[header.column.getIsSorted() as string] ?? null}
-                        </div>
-                        {header.column.getCanFilter() ? (
-                          <div>
-                            <Filter column={header.column} />
-                          </div>
-                        ) : null}
-                      </>
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
                     )}
                   </TableHead>
                 );
@@ -143,6 +152,24 @@ export default function DataTable() {
           )}
         </TableBody>
       </Table>
+      <div className="flex justify-between items-center mt-4">
+        <Button
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <span>
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </span>
+        <Button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 }

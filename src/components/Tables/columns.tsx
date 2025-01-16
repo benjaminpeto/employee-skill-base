@@ -124,7 +124,7 @@ export const columns: ColumnDef<Profile>[] = [
         {row.original.availability ? "Available" : "Unavailable"}
       </span>
     ),
-    // filterFn: "isAvailable",
+    filterFn: "isAvailable",
     meta: {
       filterVariant: "select",
     },

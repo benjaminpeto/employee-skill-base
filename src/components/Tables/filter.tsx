@@ -1,6 +1,13 @@
 import { Column } from "@tanstack/react-table";
-import DebouncedInput from "./debounced-input";
 import { Profile } from "@/types/profile";
+import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function Filter({
   column,
@@ -13,40 +20,48 @@ export default function Filter({
   return filterVariant === "range" ? (
     <div>
       <div className="flex space-x-2">
-        <DebouncedInput
+        <Input
           type="number"
           value={(columnFilterValue as [number, number])?.[0] ?? ""}
-          onChange={(value) =>
-            column.setFilterValue((old: [number, number]) => [value, old?.[1]])
+          onChange={(e) =>
+            column.setFilterValue((old: [number, number]) => [
+              e.target.value,
+              old?.[1],
+            ])
           }
           placeholder={`Min`}
-          className="w-24 border shadow rounded"
         />
-        <DebouncedInput
+        <Input
           type="number"
           value={(columnFilterValue as [number, number])?.[1] ?? ""}
-          onChange={(value) =>
-            column.setFilterValue((old: [number, number]) => [old?.[0], value])
+          onChange={(e) =>
+            column.setFilterValue((old: [number, number]) => [
+              old?.[0],
+              e.target.value,
+            ])
           }
           placeholder={`Max`}
-          className="w-24 border shadow rounded"
         />
       </div>
       <div className="h-1" />
     </div>
   ) : filterVariant === "select" ? (
-    <select
-      onChange={(e) => column.setFilterValue(e.target.value)}
+    <Select
+      onValueChange={(value) => column.setFilterValue(value)}
       value={columnFilterValue?.toString()}
     >
-      <option value="">All</option>
-      <option value="true">Available</option>
-      <option value="false">Unavailable</option>
-    </select>
+      <SelectTrigger>
+        <SelectValue placeholder="Availability" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">All</SelectItem>
+        <SelectItem value="true">Available</SelectItem>
+        <SelectItem value="false">Unavailable</SelectItem>
+      </SelectContent>
+    </Select>
   ) : (
-    <DebouncedInput
-      className="w-36 border shadow rounded"
-      onChange={(value) => column.setFilterValue(value)}
+    <Input
+      onChange={(e) => column.setFilterValue(e.target.value)}
       placeholder={`Search...`}
       type="text"
       value={(columnFilterValue ?? "") as string}

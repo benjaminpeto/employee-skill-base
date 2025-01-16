@@ -22,7 +22,7 @@ export const isAvailable: FilterFn<{
   columnId: string,
   filterValue: string
 ) => {
-  if (!filterValue) return true;
+  if (!filterValue || filterValue === "all") return true;
   const cellValue = row.getValue(columnId) as boolean;
   return filterValue === "true" ? cellValue === true : cellValue === false;
 };
