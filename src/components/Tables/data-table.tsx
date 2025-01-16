@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Profile } from "@/types/profile";
 import { createClient } from "@/lib/supabase/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
@@ -14,13 +14,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import Filter from "./filter";
+import { arrIncludes, isAvailable } from "./utils";
+
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData, TValue> {
+    filterVariant?: string;
+  }
+}
 
 export default function DataTable() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const supabase = createClient();
   const { toast } = useToast();
 
@@ -43,10 +57,26 @@ export default function DataTable() {
     fetchProfiles();
   }, [supabase, toast]);
 
+  const memoizedColumns = useMemo(() => columns, []);
+
   const table = useReactTable({
     data: profiles,
-    columns,
+    columns: memoizedColumns,
+    filterFns: {
+      arrIncludes,
+      isAvailable,
+    },
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(), //client side filtering
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
   });
 
   return (
@@ -58,12 +88,32 @@ export default function DataTable() {
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? "cursor-pointer select-none"
+                              : "",
+                            onClick: header.column.getToggleSortingHandler(),
+                          }}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: " 🔼",
+                            desc: " 🔽",
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </div>
+                        {header.column.getCanFilter() ? (
+                          <div>
+                            <Filter column={header.column} />
+                          </div>
+                        ) : null}
+                      </>
+                    )}
                   </TableHead>
                 );
               })}

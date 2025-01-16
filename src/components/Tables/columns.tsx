@@ -32,6 +32,9 @@ export const columns: ColumnDef<Profile>[] = [
   {
     accessorKey: "years_of_experience",
     header: "Years of Experience",
+    meta: {
+      filterVariant: "range",
+    },
   },
   {
     accessorKey: "tools",
@@ -40,6 +43,10 @@ export const columns: ColumnDef<Profile>[] = [
       row.original.tools
         .map((tool) => tool.charAt(0).toUpperCase() + tool.slice(1))
         .join(", "),
+    filterFn: "arrIncludes",
+    meta: {
+      filterVariant: "text",
+    },
   },
   {
     accessorKey: "programming_languages",
@@ -48,6 +55,10 @@ export const columns: ColumnDef<Profile>[] = [
       row.original.programming_languages
         .map((lang) => lang.charAt(0).toUpperCase() + lang.slice(1))
         .join(", "),
+    filterFn: "arrIncludes",
+    meta: {
+      filterVariant: "text",
+    },
   },
   {
     accessorKey: "applications_services",
@@ -56,6 +67,10 @@ export const columns: ColumnDef<Profile>[] = [
       row.original.applications_services
         .map((app) => app.charAt(0).toUpperCase() + app.slice(1))
         .join(", "),
+    filterFn: "arrIncludes",
+    meta: {
+      filterVariant: "text",
+    },
   },
   {
     accessorKey: "spoken_languages",
@@ -76,6 +91,10 @@ export const columns: ColumnDef<Profile>[] = [
         ))}
       </div>
     ),
+    filterFn: "arrIncludes",
+    meta: {
+      filterVariant: "text",
+    },
   },
   {
     accessorKey: "timezone",
@@ -105,5 +124,9 @@ export const columns: ColumnDef<Profile>[] = [
         {row.original.availability ? "Available" : "Unavailable"}
       </span>
     ),
+    // filterFn: "isAvailable",
+    meta: {
+      filterVariant: "select",
+    },
   },
 ];
