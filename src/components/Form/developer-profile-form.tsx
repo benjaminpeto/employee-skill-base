@@ -8,22 +8,32 @@ import { Form } from "@/components/ui/form";
 import { useSession } from "@/hooks/useSession";
 import { createClient } from "@/lib/supabase/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { defaultValues } from "@/types/form";
 import { formSchema } from "@/schemas/formSchema";
 import { useProfileOperations } from "@/hooks/useProfileOperations";
 import { FormFields } from "./form-fields";
+import { LoaderCircle, Save } from "lucide-react";
 
 export function DeveloperProfileForm() {
   const session = useSession();
   const supabase = createClient();
   const { toast } = useToast();
   const { handleProfileSubmission } = useProfileOperations(supabase, toast);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    const subscription = form.watch(() => {
+      setIsDirty(form.formState.isDirty);
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -64,14 +74,28 @@ export function DeveloperProfileForm() {
   }, [session, form, supabase]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSaving(true);
     await handleProfileSubmission(values);
+    setIsSaving(false);
+    form.reset(values);
+    setIsDirty(false);
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormFields form={form} />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={!isDirty || isSaving}>
+          {isSaving ? (
+            <>
+              <LoaderCircle className="w-4 h-4 animate-spin" /> Saving...
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4" /> Save
+            </>
+          )}
+        </Button>
       </form>
     </Form>
   );
