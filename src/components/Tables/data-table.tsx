@@ -24,15 +24,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { arrIncludes, isAvailable } from "./utils";
+import Pagination from "./pagination";
 import FiltersContainer from "./filters-container";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationLink,
-  PaginationNext,
-} from "@/components/ui/pagination";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -159,46 +152,7 @@ export default function DataTable() {
           )}
         </TableBody>
       </Table>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (!table.getCanPreviousPage()) return;
-                table.previousPage();
-              }}
-              disabled={!table.getCanPreviousPage()}
-            />
-          </PaginationItem>
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <PaginationItem key={index}>
-              <PaginationLink
-                href="#"
-                isActive={table.getState().pagination.pageIndex === index}
-                onClick={(e) => {
-                  e.preventDefault();
-                  table.setPageIndex(index);
-                }}
-              >
-                {index + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (!table.getCanNextPage()) return;
-                table.nextPage();
-              }}
-              disabled={!table.getCanNextPage()}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <Pagination table={table} />
     </>
   );
 }
