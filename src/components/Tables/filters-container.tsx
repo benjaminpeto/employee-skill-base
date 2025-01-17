@@ -17,7 +17,7 @@ export default function FiltersContainer({
   clearFilters: () => void;
 }) {
   return (
-    <div className="rounded-md mb-8">
+    <div className="rounded-md mb-4">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className="font-semibold text-xl pt-0">
