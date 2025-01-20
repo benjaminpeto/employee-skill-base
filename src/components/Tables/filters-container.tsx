@@ -25,20 +25,22 @@ export default function FiltersContainer({
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4 items-end p-1">
-              {columns.map((column) => (
-                <div key={column.id}>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">
-                    {typeof column.columnDef.header === "function"
-                      ? column.columnDef.header({
-                          column: column,
-                          header: {} as Header<Profile, unknown>,
-                          table: {} as Table<Profile>,
-                        })
-                      : column.columnDef.header}
-                  </label>
-                  <Filter column={column} />
-                </div>
-              ))}
+              {columns
+                .filter((column) => column.id !== "avatar_url")
+                .map((column) => (
+                  <div key={column.id}>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">
+                      {typeof column.columnDef.header === "function"
+                        ? column.columnDef.header({
+                            column: column,
+                            header: {} as Header<Profile, unknown>,
+                            table: {} as Table<Profile>,
+                          })
+                        : column.columnDef.header}
+                    </label>
+                    <Filter column={column} />
+                  </div>
+                ))}
               <Button onClick={clearFilters} variant="destructive">
                 Clear Filters
               </Button>

@@ -26,6 +26,7 @@ import {
 import { arrIncludes, isAvailable } from "./utils";
 import Pagination from "./pagination";
 import FiltersContainer from "./filters-container";
+import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -97,7 +98,7 @@ export default function DataTable() {
         columns={table.getAllColumns()}
         clearFilters={clearFilters}
       />
-      <Table>
+      <Table className="text-xs">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -108,7 +109,7 @@ export default function DataTable() {
                       <div
                         {...{
                           className: header.column.getCanSort()
-                            ? "cursor-pointer select-none"
+                            ? "cursor-pointer select-none flex items-center justify-between"
                             : "",
                           onClick: header.column.getToggleSortingHandler(),
                         }}
@@ -117,10 +118,15 @@ export default function DataTable() {
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {{
-                          asc: " 🔼",
-                          desc: " 🔽",
-                        }[header.column.getIsSorted() as string] ?? null}
+                        {header.column.getIsSorted() ? (
+                          header.column.getIsSorted() === "asc" ? (
+                            <ChevronUp className="ml-2 h-4 w-4" />
+                          ) : (
+                            <ChevronDown className="ml-2 h-4 w-4" />
+                          )
+                        ) : (
+                          <ChevronsUpDown className="ml-2 h-4 w-4" />
+                        )}
                       </div>
                     )}
                   </TableHead>
