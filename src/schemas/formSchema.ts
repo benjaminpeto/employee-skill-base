@@ -2,6 +2,7 @@ import { UseFormReturn } from "react-hook-form";
 import * as z from "zod";
 
 export const formSchema = z.object({
+  avatar_url: z.string().url(),
   auth_user_id: z.string().uuid(),
   name: z.string(),
   job_title: z.string().min(2, {

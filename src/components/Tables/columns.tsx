@@ -3,24 +3,32 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Profile } from "@/types/profile";
 import { getCountryEmoji } from "../../utils/getCountryEmoji";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 export const columns: ColumnDef<Profile>[] = [
+  {
+    accessorKey: "avatar_url",
+    header: "Avatar",
+    cell: ({ row }) => (
+      <Avatar className="h-8 w-8 rounded-full">
+        <AvatarImage
+          className="h-8 w-8 rounded-full"
+          src={row.original.avatar_url}
+          alt={row.original.name}
+        />
+        <AvatarFallback className="rounded-full bg-slate-700 h-8 w-8 flex items-center justify-center">
+          {row.original.name
+            ?.split(" ")
+            .map((n: string) => n[0])
+            .join("")}
+        </AvatarFallback>
+      </Avatar>
+    ),
+  },
   {
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => <span className="font-bold">{row.original.name}</span>,
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => (
-      <a
-        href={`mailto:${row.original.email}`}
-        className="text-blue-500 underline"
-      >
-        {row.original.email}
-      </a>
-    ),
   },
   {
     accessorKey: "job_title",
@@ -97,20 +105,6 @@ export const columns: ColumnDef<Profile>[] = [
     },
   },
   {
-    accessorKey: "timezone",
-    header: "Timezone",
-    cell: ({ row }) => (
-      <span className="uppercase">{row.original.timezone}</span>
-    ),
-  },
-  {
-    accessorKey: "current_project",
-    header: "Current Project",
-    cell: ({ row }) => (
-      <span className="capitalize">{row.original.current_project}</span>
-    ),
-  },
-  {
     accessorKey: "availability",
     header: "Availability",
     cell: ({ row }) => (
@@ -128,5 +122,31 @@ export const columns: ColumnDef<Profile>[] = [
     meta: {
       filterVariant: "select",
     },
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) => (
+      <a
+        href={`mailto:${row.original.email}`}
+        className="text-blue-500 underline"
+      >
+        {row.original.email}
+      </a>
+    ),
+  },
+  {
+    accessorKey: "timezone",
+    header: "Timezone",
+    cell: ({ row }) => (
+      <span className="uppercase">{row.original.timezone}</span>
+    ),
+  },
+  {
+    accessorKey: "current_project",
+    header: "Current Project",
+    cell: ({ row }) => (
+      <span className="capitalize">{row.original.current_project}</span>
+    ),
   },
 ];

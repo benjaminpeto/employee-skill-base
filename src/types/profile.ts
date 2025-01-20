@@ -1,4 +1,5 @@
 export interface Profile {
+  avatar_url: string;
   auth_user_id: string;
   name: string;
   email: string;

@@ -27,6 +27,7 @@ export function useProfileOperations(
       .update({
         ...sanitizedValues,
         availability: availabilityBoolean,
+        avatar_url: sanitizedValues.avatar_url,
       })
       .eq("auth_user_id", sanitizedValues.auth_user_id);
 
@@ -41,6 +42,7 @@ export function useProfileOperations(
       {
         ...sanitizedValues,
         availability: availabilityBoolean,
+        avatar_url: sanitizedValues.avatar_url,
       },
     ]);
 
@@ -66,6 +68,7 @@ export function useProfileOperations(
         .split(",")
         .map((lang: string) => lang.trim())
         .filter((lang: string) => lang),
+      avatar_url: values.avatar_url,
     };
   }
 

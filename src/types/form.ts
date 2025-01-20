@@ -1,4 +1,5 @@
 export interface FormDefaultValues {
+  avatar_url: string;
   auth_user_id: string;
   name: string;
   email: string;
@@ -14,6 +15,7 @@ export interface FormDefaultValues {
 }
 
 export const defaultValues: FormDefaultValues = {
+  avatar_url: "",
   auth_user_id: "",
   name: "",
   email: "",
@@ -29,6 +31,7 @@ export const defaultValues: FormDefaultValues = {
 };
 
 export interface SanitizedFromValues {
+  avatar_url: string;
   auth_user_id: string;
   name: string;
   email: string;

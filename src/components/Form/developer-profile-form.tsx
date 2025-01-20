@@ -53,6 +53,8 @@ export function DeveloperProfileForm() {
         console.error("Error fetching profile:", error);
       } else if (data) {
         const formData: z.infer<typeof formSchema> = {
+          avatar_url:
+            data.avatar_url || session.user.user_metadata.avatar_url || null,
           auth_user_id: data.auth_user_id,
           name: data.name || session.user.user_metadata.full_name,
           email: data.email || session.user.email,
