@@ -27,6 +27,7 @@ import { arrIncludes, isAvailable } from "./utils";
 import Pagination from "./pagination";
 import FiltersContainer from "./filters-container";
 import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,6 +45,7 @@ export default function DataTable() {
   });
   const supabase = createClient();
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProfiles = async () => {
@@ -70,6 +72,10 @@ export default function DataTable() {
     table.resetColumnFilters();
   };
 
+  const handleRowClick = (profileId: string) => {
+    router.push(`/dashboard/user/${profileId}`);
+  };
+
   const table = useReactTable({
     data: profiles,
     columns: memoizedColumns,
@@ -87,9 +93,6 @@ export default function DataTable() {
     getFilteredRowModel: getFilteredRowModel(), //client side filtering
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: false,
   });
 
   return (
@@ -142,6 +145,8 @@ export default function DataTable() {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                onClick={() => handleRowClick(row.original.auth_user_id)}
+                className="cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

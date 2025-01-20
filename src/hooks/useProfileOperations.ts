@@ -49,6 +49,26 @@ export function useProfileOperations(
     return data;
   }
 
+  async function getProfile(profileId: string) {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("auth_user_id", profileId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching profile:", error);
+      toast({
+        title: "Error",
+        description: "There was an error fetching the profile.",
+        variant: "destructive",
+      });
+      return null;
+    }
+
+    return data;
+  }
+
   function sanitizeValues(values: FormDefaultValues): SanitizedFromValues {
     return {
       ...values,
@@ -111,5 +131,6 @@ export function useProfileOperations(
     insertProfile,
     sanitizeValues,
     handleProfileSubmission,
+    getProfile,
   };
 }
