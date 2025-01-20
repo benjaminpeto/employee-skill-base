@@ -1,5 +1,3 @@
-"use client";
-
 import { ColumnDef } from "@tanstack/react-table";
 import { Profile } from "@/types/profile";
 import { getCountryEmoji } from "../../utils/getCountryEmoji";

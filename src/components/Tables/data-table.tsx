@@ -73,7 +73,7 @@ export default function DataTable() {
   };
 
   const handleRowClick = (profileId: string) => {
-    router.push(`/dashboard/user/${profileId}`);
+    router.push(`/dashboard/${profileId}`);
   };
 
   const table = useReactTable({

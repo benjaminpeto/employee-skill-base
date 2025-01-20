@@ -2,14 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/Navigation/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -17,7 +9,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/toaster";
-import React from "react";
+import BreadcrumbComponent from "@/components/BreadCrumb";
 
 export default function DashboardLayout({
   children,
@@ -27,8 +19,12 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
 
-  const capitalize = (str: string) =>
-    str.charAt(0).toUpperCase() + str.slice(1);
+  const labels = {
+    dashboard: "Dashboard",
+    [pathSegments[1]]: "User Profile",
+    profile: "My Profile",
+    analytics: "Analytics",
+  };
 
   return (
     <SidebarProvider>
@@ -38,29 +34,7 @@ export default function DashboardLayout({
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            {/* Make sure to move breadcrumbs out to its own component, so we can use the dashboard as a server component */}
-            <Breadcrumb>
-              <BreadcrumbList>
-                {pathSegments.map((segment, index) => (
-                  <React.Fragment key={index}>
-                    <BreadcrumbItem>
-                      {index < pathSegments.length - 1 ? (
-                        <BreadcrumbLink
-                          href={`/${pathSegments
-                            .slice(0, index + 1)
-                            .join("/")}`}
-                        >
-                          {capitalize(segment)}
-                        </BreadcrumbLink>
-                      ) : (
-                        <BreadcrumbPage>{capitalize(segment)}</BreadcrumbPage>
-                      )}
-                    </BreadcrumbItem>
-                    {index < pathSegments.length - 1 && <BreadcrumbSeparator />}
-                  </React.Fragment>
-                ))}
-              </BreadcrumbList>
-            </Breadcrumb>
+            <BreadcrumbComponent pathSegments={pathSegments} labels={labels} />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-2 pt-0">

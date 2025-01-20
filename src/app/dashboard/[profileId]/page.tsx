@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/supabaseServer";
-import EmployeeProfile from "@/components/profile/EmployeeProfile";
+import EmployeeProfile from "@/components/Profile/employee-profile";
 
 export default async function ProfilePage({
   params,
