@@ -98,7 +98,7 @@ export default function DataTable() {
         columns={table.getAllColumns()}
         clearFilters={clearFilters}
       />
-      <Table className="text-xs">
+      <Table className="text-xs font-mono">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
