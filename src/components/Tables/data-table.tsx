@@ -40,7 +40,7 @@ export default function DataTable() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 9,
+    pageSize: 10,
   });
   const supabase = createClient();
   const { toast } = useToast();
@@ -118,15 +118,16 @@ export default function DataTable() {
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {header.column.getIsSorted() ? (
-                          header.column.getIsSorted() === "asc" ? (
-                            <ChevronUp className="ml-2 h-4 w-4" />
+                        {header.column.getCanSort() &&
+                          (header.column.getIsSorted() ? (
+                            header.column.getIsSorted() === "asc" ? (
+                              <ChevronUp className="ml-2 h-4 w-4" />
+                            ) : (
+                              <ChevronDown className="ml-2 h-4 w-4" />
+                            )
                           ) : (
-                            <ChevronDown className="ml-2 h-4 w-4" />
-                          )
-                        ) : (
-                          <ChevronsUpDown className="ml-2 h-4 w-4" />
-                        )}
+                            <ChevronsUpDown className="ml-2 h-4 w-4" />
+                          ))}
                       </div>
                     )}
                   </TableHead>

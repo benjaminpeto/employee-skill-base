@@ -9,6 +9,7 @@ export const columns: ColumnDef<Profile>[] = [
   {
     accessorKey: "avatar_url",
     header: "Avatar",
+    enableSorting: false,
     cell: ({ row }) => (
       <Avatar className="h-8 w-8 rounded-full">
         <AvatarImage
