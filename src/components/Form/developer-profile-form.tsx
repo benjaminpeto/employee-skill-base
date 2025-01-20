@@ -26,6 +26,7 @@ export function DeveloperProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,
+    shouldUnregister: false,
   });
 
   useEffect(() => {
@@ -51,19 +52,23 @@ export function DeveloperProfileForm() {
       if (error) {
         console.error("Error fetching profile:", error);
       } else if (data) {
-        form.reset({
+        const formData: z.infer<typeof formSchema> = {
           auth_user_id: data.auth_user_id,
           name: data.name || session.user.user_metadata.full_name,
           email: data.email || session.user.email,
-          job_title: data.job_title,
-          years_of_experience: data.years_of_experience,
-          tools: data.tools.join(", "),
-          programming_languages: data.programming_languages.join(", "),
-          applications_services: data.applications_services.join(", "),
-          spoken_languages: data.spoken_languages.join(", "),
-          timezone: data.timezone,
-          current_project: data.current_project,
+          job_title: data.job_title || "",
+          years_of_experience: data.years_of_experience || 0,
+          tools: data.tools?.join(", ") || "",
+          programming_languages: data.programming_languages?.join(", ") || "",
+          applications_services: data.applications_services?.join(", ") || "",
+          spoken_languages: data.spoken_languages?.join(", ") || "",
+          timezone: data.timezone || "",
+          current_project: data.current_project || "",
           availability: data.availability ? "available" : "unavailable",
+        };
+
+        form.reset(formData, {
+          keepDefaultValues: true,
         });
       }
     };

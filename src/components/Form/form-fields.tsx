@@ -153,7 +153,25 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
       render={({ field }) => (
         <FormItem>
           <FormLabel>Timezone</FormLabel>
-          <Select onValueChange={field.onChange} value={field.value}>
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              form.trigger(field.name);
+              setTimeout(
+                () =>
+                  form.setValue(
+                    field.name,
+                    value as "available" | "unavailable",
+                    {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                    }
+                  ),
+                0
+              );
+            }}
+            value={field.value || ""}
+          >
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Select a timezone" />
@@ -252,7 +270,25 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
       render={({ field }) => (
         <FormItem>
           <FormLabel>Availability</FormLabel>
-          <Select onValueChange={field.onChange} value={field.value}>
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              form.trigger(field.name);
+              setTimeout(
+                () =>
+                  form.setValue(
+                    field.name,
+                    value as "available" | "unavailable",
+                    {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                    }
+                  ),
+                0
+              );
+            }}
+            value={field.value || ""}
+          >
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Select your availability" />
