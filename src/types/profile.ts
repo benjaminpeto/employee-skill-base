@@ -12,3 +12,9 @@ export interface Profile {
   current_project: string;
   availability: boolean;
 }
+
+export interface UserInfo {
+  name: string;
+  email: string;
+  avatarUrl: string;
+}
