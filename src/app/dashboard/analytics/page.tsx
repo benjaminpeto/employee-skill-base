@@ -1,19 +1,16 @@
-// import { createClient } from "@/lib/supabase/supabaseServer";
+import DonutTotalEmployeesChart from "@/components/Charts/donut-total-employees-chart";
 
 export default async function AnalyticsPage() {
-  //   const supabase = createClient();
-  //   const { data, error } = await (await supabase)
-  //     .from("profiles")
-  //     .select("*")
-  //     .single();
-
-  //   if (error || !data) {
-  //     return <div>Loading...</div>;
-  //   }
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Insights</h1>
+      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div className="aspect-video rounded-xl bg-muted/50">
+          <DonutTotalEmployeesChart />
+        </div>
+        <div className="aspect-video rounded-xl bg-muted/50"></div>
+        <div className="aspect-video rounded-xl bg-muted/50"></div>
+      </div>
     </div>
   );
 }
