@@ -26,6 +26,7 @@ export default function DonutChart({
   footerText,
   chartConfig,
   totalValue,
+  footerParagraph,
 }: DonutChartProps) {
   return (
     <Card className="flex flex-col">
@@ -88,7 +89,7 @@ export default function DonutChart({
           {footerText} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing all {totalLabel.toLowerCase()}
+          {footerParagraph}
         </div>
       </CardFooter>
     </Card>

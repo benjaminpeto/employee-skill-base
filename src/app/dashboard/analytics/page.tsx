@@ -1,4 +1,5 @@
-import DonutTotalEmployeesChart from "@/components/Charts/donut-total-employees-chart";
+import ProjectsPieChart from "@/components/Charts/projects-pie-chart";
+import DonutTotalEmployeesChart from "@/components/Charts/total-employees-pie-chart";
 
 export default async function AnalyticsPage() {
   return (
@@ -8,7 +9,9 @@ export default async function AnalyticsPage() {
         <div className="aspect-video rounded-xl bg-muted/50">
           <DonutTotalEmployeesChart />
         </div>
-        <div className="aspect-video rounded-xl bg-muted/50"></div>
+        <div className="aspect-video rounded-xl bg-muted/50">
+          <ProjectsPieChart />
+        </div>
         <div className="aspect-video rounded-xl bg-muted/50"></div>
       </div>
     </div>

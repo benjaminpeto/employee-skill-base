@@ -59,6 +59,7 @@ export default function DonutTotalEmployeesChart() {
       } employees are available.`}
       chartConfig={chartConfig}
       totalValue={totalValue}
+      footerParagraph="Showing all employees"
     />
   );
 }

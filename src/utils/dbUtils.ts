@@ -16,3 +16,31 @@ export const getEmployeeCounts = async () => {
 
   return { available, unavailable };
 };
+
+export const getProjectAssignments = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("current_project");
+
+  if (error) {
+    console.error("Error fetching project assignments data", error);
+    return [];
+  }
+
+  const projectCounts = data.reduce(
+    (acc: { [key: string]: number }, profile) => {
+      const project = profile.current_project;
+      if (project) {
+        acc[project] = (acc[project] || 0) + 1;
+      }
+      return acc;
+    },
+    {}
+  );
+
+  return Object.entries(projectCounts).map(([project, count]) => ({
+    label: project,
+    value: count,
+  }));
+};

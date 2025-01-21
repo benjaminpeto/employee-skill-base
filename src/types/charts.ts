@@ -8,6 +8,7 @@ export interface DonutChartProps {
   footerText: string;
   chartConfig: ChartConfig;
   totalValue: number;
+  footerParagraph?: string;
 }
 
 export interface ChartDataState {
