@@ -1,9 +1,14 @@
-import DataTable from "@/components/Tables/data-table";
+"use client";
+
+import DataTable from "@/components/Tables";
+import { TableProvider } from "@/contexts/TableContext";
 
 export default function Page() {
   return (
-    <div className="container mx-auto p-4">
-      <DataTable />
+    <div className="p-4">
+      <TableProvider>
+        <DataTable />
+      </TableProvider>
     </div>
   );
 }
