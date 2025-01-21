@@ -1,17 +1,30 @@
+"use client";
+
+import { useRef } from "react";
+import { Profile } from "@/types/profile";
+import { getCountryEmoji } from "@/utils/getCountryEmoji";
+import { useExportPDF } from "@/hooks/useExportPDF";
+
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Profile } from "@/types/profile";
-import { getCountryEmoji } from "@/utils/getCountryEmoji";
+import { Button } from "@/components/ui/button";
 
 interface EmployeeProfileProps {
   profile: Profile;
 }
 
 export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
+  const profileRef = useRef<HTMLDivElement>(null);
+  const { exportPDF } = useExportPDF();
+
+  const handleExportPDF = () => {
+    exportPDF(profileRef.current, profile.name);
+  };
+
   return (
     <div className="container mx-auto p-4">
-      <Card>
+      <Card ref={profileRef}>
         <CardHeader className="flex flex-col items-center space-y-4 mb-4">
           <Avatar className="w-20 h-20">
             <AvatarImage
@@ -33,13 +46,15 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {profile.years_of_experience && (
               <div>
-                <h3 className="text-lg font-semibold">Years of Experience</h3>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Years of Experience
+                </h3>
                 <p>{profile.years_of_experience}</p>
               </div>
             )}
             {profile.tools && profile.tools.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold">Tools</h3>
+                <h3 className="text-gray-500 text-lg font-semibold">Tools</h3>
                 <div className="flex flex-wrap gap-2">
                   {profile.tools.map((tool) => (
                     <Badge className="capitalize" key={tool}>
@@ -52,7 +67,7 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
             {profile.programming_languages &&
               profile.programming_languages.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold">
+                  <h3 className="text-gray-500 text-lg font-semibold">
                     Programming Languages
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -67,7 +82,7 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
             {profile.applications_services &&
               profile.applications_services.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold">
+                  <h3 className="text-gray-500 text-lg font-semibold">
                     Applications & Services
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -82,7 +97,9 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
             {profile.spoken_languages &&
               profile.spoken_languages.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold">Spoken Languages</h3>
+                  <h3 className="text-gray-500 text-lg font-semibold">
+                    Spoken Languages
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {profile.spoken_languages.map((language) => (
                       <span
@@ -101,21 +118,30 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
               )}
             {profile.timezone && (
               <div>
-                <h3 className="text-lg font-semibold">Timezone</h3>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Timezone
+                </h3>
                 <p className="uppercase">{profile.timezone}</p>
               </div>
             )}
             <div>
-              <h3 className="text-lg font-semibold">Current Project</h3>
+              <h3 className="text-gray-500 text-lg font-semibold">
+                Current Project
+              </h3>
               <p>{profile.current_project || "No project assigned."}</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold">Availability</h3>
+              <h3 className="text-gray-500 text-lg font-semibold">
+                Availability
+              </h3>
               <p>{profile.availability ? "Available" : "Not Available"}</p>
             </div>
           </div>
         </CardContent>
       </Card>
+      <Button onClick={handleExportPDF} className="mt-4">
+        Export as PDF
+      </Button>
     </div>
   );
 }
