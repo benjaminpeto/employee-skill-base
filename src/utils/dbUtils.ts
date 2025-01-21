@@ -44,3 +44,79 @@ export const getProjectAssignments = async () => {
     value: count,
   }));
 };
+
+export const getSpokenLanguages = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("spoken_languages");
+
+  if (error) {
+    console.error("Error fetching spoken languages data", error);
+    return [];
+  }
+
+  const sanitizeLanguage = (language: string) => {
+    return language
+      .trim()
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const languageCounts = data.reduce(
+    (acc: { [key: string]: number }, profile) => {
+      const languages = profile.spoken_languages;
+      if (languages) {
+        languages.forEach((language: string) => {
+          const sanitizedLanguage = sanitizeLanguage(language);
+          acc[sanitizedLanguage] = (acc[sanitizedLanguage] || 0) + 1;
+        });
+      }
+      return acc;
+    },
+    {}
+  );
+
+  return Object.entries(languageCounts).map(([language, count]) => ({
+    label: language,
+    value: count,
+  }));
+};
+
+export const getProgrammingLanguages = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("programming_languages");
+
+  if (error) {
+    console.error("Error fetching programming languages data", error);
+    return [];
+  }
+
+  const sanitizeLanguage = (language: string) => {
+    return language
+      .trim()
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const languageCounts = data.reduce(
+    (acc: { [key: string]: number }, profile) => {
+      const languages = profile.programming_languages;
+      if (languages) {
+        languages.forEach((language: string) => {
+          const sanitizedLanguage = sanitizeLanguage(language);
+          acc[sanitizedLanguage] = (acc[sanitizedLanguage] || 0) + 1;
+        });
+      }
+      return acc;
+    },
+    {}
+  );
+
+  return Object.entries(languageCounts).map(([language, count]) => ({
+    label: language,
+    value: count,
+  }));
+};

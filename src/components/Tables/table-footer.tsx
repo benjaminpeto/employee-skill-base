@@ -28,7 +28,7 @@ export default function TableFooter({
       <TableRow>
         <TableCell colSpan={columns.length}>
           <div className="flex justify-between items-center">
-            <span>{`Rows found: ${rowsFound}`}</span>
+            <span>{`Employees found: ${rowsFound}`}</span>
             <div className="flex items-center space-x-2">
               <span>Rows per page:</span>
               <Select

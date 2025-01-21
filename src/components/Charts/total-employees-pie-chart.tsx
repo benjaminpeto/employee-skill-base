@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import DonutChart from "@/components/Charts/pie-chart";
 import { ChartConfig } from "@/components/ui/chart";
 import { getEmployeeCounts } from "@/utils/dbUtils";
-import { ChartDataState } from "@/types/charts";
+import { PieChartDataState } from "@/types/charts";
 
 const fetchEmployeeData = async () => {
   const { available, unavailable } = await getEmployeeCounts();
@@ -33,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function DonutTotalEmployeesChart() {
-  const [chartData, setChartData] = useState<ChartDataState[]>([]);
+  const [chartData, setChartData] = useState<PieChartDataState[]>([]);
 
   useEffect(() => {
     const loadData = async () => {

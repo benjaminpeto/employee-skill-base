@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import DonutChart from "@/components/Charts/pie-chart";
 import { ChartConfig } from "@/components/ui/chart";
 import { getProjectAssignments } from "@/utils/dbUtils";
-import { ChartDataState } from "@/types/charts";
+import { PieChartDataState } from "@/types/charts";
 
 const fetchProjectData = async () => {
   const data = await getProjectAssignments();
@@ -14,7 +14,7 @@ const fetchProjectData = async () => {
   }));
 };
 
-const generateChartConfig = (data: ChartDataState[]): ChartConfig => {
+const generateChartConfig = (data: PieChartDataState[]): ChartConfig => {
   const config: ChartConfig = {
     projects: {
       label: "Projects",
@@ -32,7 +32,7 @@ const generateChartConfig = (data: ChartDataState[]): ChartConfig => {
 };
 
 export default function ProjectsPieChart() {
-  const [chartData, setChartData] = useState<ChartDataState[]>([]);
+  const [chartData, setChartData] = useState<PieChartDataState[]>([]);
   const [chartConfig, setChartConfig] = useState<ChartConfig>({
     projects: { label: "Projects" },
   });
@@ -47,8 +47,8 @@ export default function ProjectsPieChart() {
     loadData();
   }, []);
 
-  const totalValue = useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.value, 0);
+  const totalProject = useMemo(() => {
+    return chartData.length;
   }, [chartData]);
 
   return (
@@ -59,7 +59,7 @@ export default function ProjectsPieChart() {
       totalLabel="Projects"
       footerText={`Total developers assigned to projects.`}
       chartConfig={chartConfig}
-      totalValue={totalValue}
+      totalValue={totalProject}
       footerParagraph="Showing all projects"
     />
   );

@@ -1,3 +1,5 @@
+import LanguagesPieChart from "@/components/Charts/languages-pie-chart";
+import ProgrammingLanguagesBarChart from "@/components/Charts/programming-languages-bar-chart";
 import ProjectsPieChart from "@/components/Charts/projects-pie-chart";
 import DonutTotalEmployeesChart from "@/components/Charts/total-employees-pie-chart";
 
@@ -12,7 +14,12 @@ export default async function AnalyticsPage() {
         <div className="aspect-video rounded-xl bg-muted/50">
           <ProjectsPieChart />
         </div>
-        <div className="aspect-video rounded-xl bg-muted/50"></div>
+        <div className="aspect-video rounded-xl bg-muted/50">
+          <LanguagesPieChart />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        <ProgrammingLanguagesBarChart />
       </div>
     </div>
   );
