@@ -39,6 +39,11 @@ export const columns: ColumnDef<Profile>[] = [
   {
     accessorKey: "years_of_experience",
     header: "Years of Experience",
+    cell: ({ row }) => (
+      <span className="flex justify-center">
+        {row.original.years_of_experience}
+      </span>
+    ),
     meta: {
       filterVariant: "range",
     },
