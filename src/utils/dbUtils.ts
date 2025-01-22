@@ -1,6 +1,13 @@
 import { createClient } from "@/lib/supabase/supabaseClient";
 import { ProfileForAnalytics } from "@/types/charts";
 
+/**
+ * Fetches data from the specified column in the "profiles" table, sanitizes the values,
+ * and returns an array of objects with labels and their corresponding counts.
+ * @param column - The column to fetch data from.
+ * @param sanitizeFn - The function to sanitize the values.
+ * @returns An array of objects with labels and their corresponding counts.
+ */
 const fetchDataAndSanitize = async (
   column: keyof ProfileForAnalytics,
   sanitizeFn: (value: string) => string
@@ -33,6 +40,11 @@ const fetchDataAndSanitize = async (
   }));
 };
 
+/**
+ * Sanitizes a string by trimming, converting to lowercase, and capitalizing the first letter of each word.
+ * @param value - The string to sanitize.
+ * @returns The sanitized string.
+ */
 const sanitizeString = (value: string) => {
   return value
     .trim()
@@ -40,6 +52,10 @@ const sanitizeString = (value: string) => {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
+/**
+ * Fetches the count of available and unavailable employees from the "profiles" table.
+ * @returns An object with the counts of available and unavailable employees.
+ */
 export const getEmployeeCounts = async () => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -57,6 +73,10 @@ export const getEmployeeCounts = async () => {
   return { available, unavailable };
 };
 
+/**
+ * Fetches the count of employees assigned to each project from the "profiles" table.
+ * @returns An array of objects with project names and their corresponding counts.
+ */
 export const getProjectAssignments = async () => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -85,6 +105,10 @@ export const getProjectAssignments = async () => {
   }));
 };
 
+/**
+ * Fetches the count of employees within different ranges of years of experience from the "profiles" table.
+ * @returns An array of objects with experience ranges and their corresponding counts.
+ */
 export const getYearsOfExperience = async () => {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -129,22 +153,42 @@ export const getYearsOfExperience = async () => {
     .filter((range) => range.value > 0);
 };
 
+/**
+ * Fetches and sanitizes the spoken languages data from the "profiles" table.
+ * @returns An array of objects with language labels and their corresponding counts.
+ */
 export const getSpokenLanguages = async () => {
   return fetchDataAndSanitize("spoken_languages", sanitizeString);
 };
 
+/**
+ * Fetches and sanitizes the programming languages data from the "profiles" table.
+ * @returns An array of objects with language labels and their corresponding counts.
+ */
 export const getProgrammingLanguages = async () => {
   return fetchDataAndSanitize("programming_languages", sanitizeString);
 };
 
+/**
+ * Fetches and sanitizes the applications and services data from the "profiles" table.
+ * @returns An array of objects with application/service labels and their corresponding counts.
+ */
 export const getApplicationsServices = async () => {
   return fetchDataAndSanitize("applications_services", sanitizeString);
 };
 
+/**
+ * Fetches and sanitizes the tools data from the "profiles" table.
+ * @returns An array of objects with tool labels and their corresponding counts.
+ */
 export const getTools = async () => {
   return fetchDataAndSanitize("tools", sanitizeString);
 };
 
+/**
+ * Fetches and sanitizes the job titles data from the "profiles" table.
+ * @returns An array of objects with job title labels and their corresponding counts.
+ */
 export const getJobTitles = async () => {
   return fetchDataAndSanitize("job_title", sanitizeString);
 };

@@ -1,4 +1,8 @@
-// Helper function to map language to country emoji
+/**
+ * Maps a given language to its corresponding country emoji.
+ * @param language - The language to map.
+ * @returns The corresponding country emoji or an empty string if not found.
+ */
 export const getCountryEmoji = (language: string) => {
   const sanitizeLanguage = (lang: string) => {
     return lang
@@ -71,6 +75,13 @@ export const getCountryEmoji = (language: string) => {
     Hebrew: "🇮🇱",
     Yiddish: "🇮🇱",
     Indian: "🇮🇳",
+    Indonesian: "🇮🇩",
+    Filipino: "🇵🇭",
+    Malaysian: "🇲🇾",
+    Thai: "🇹🇭",
+    Burmese: "🇲🇲",
+    Khmer: "🇰🇭",
+    Lao: "🇱🇦",
   };
 
   const sanitizedLanguage = sanitizeLanguage(language);

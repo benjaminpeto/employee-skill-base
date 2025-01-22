@@ -1,5 +1,12 @@
 import { FilterFn } from "@tanstack/react-table";
 
+/**
+ * Custom filter function to check if an array includes a specified filter value.
+ * @param row - The row object containing the cell value.
+ * @param columnId - The column ID to filter on.
+ * @param filterValue - The value to filter by.
+ * @returns True if the array includes the filter value, otherwise false.
+ */
 export const arrIncludes: FilterFn<{
   getValue: (columnId: string) => string[];
 }> = (
@@ -15,6 +22,13 @@ export const arrIncludes: FilterFn<{
   );
 };
 
+/**
+ * Custom filter function to check if a boolean value matches the specified filter value.
+ * @param row - The row object containing the cell value.
+ * @param columnId - The column ID to filter on.
+ * @param filterValue - The value to filter by.
+ * @returns True if the boolean value matches the filter value, otherwise false.
+ */
 export const isAvailable: FilterFn<{
   getValue: (columnId: string) => boolean;
 }> = (

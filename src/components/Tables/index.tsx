@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 import { columns } from "./columns";
-import { arrIncludes, isAvailable } from "./utils";
+import { arrIncludes, isAvailable } from "../../utils/tableUtils";
 import Pagination from "./pagination";
 import FiltersContainer from "./filters-container";
 import { useTableContext } from "@/contexts/TableContext";
