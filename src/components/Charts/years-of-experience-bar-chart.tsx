@@ -1,27 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import CustomBarChart from "@/components/Charts/bar-chart";
-import { ChartConfig } from "@/components/ui/chart";
 import { getYearsOfExperience } from "@/utils/dbUtils";
-import { generateChartConfig, fetchChartData } from "@/utils/chartUtils";
-import { BarChartDataState } from "@/types/charts";
+import { useChartData } from "@/hooks/useChartData";
 
 export default function YearsOfExperienceBarChart() {
-  const [chartData, setChartData] = useState<BarChartDataState[]>([]);
-  const [chartConfig, setChartConfig] = useState<ChartConfig>({
-    experience: { label: "Experience" },
-  });
-
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchChartData(getYearsOfExperience);
-      setChartData(data);
-      setChartConfig(generateChartConfig(data, "experience"));
-    };
-
-    loadData();
-  }, []);
+  const { chartData, chartConfig } = useChartData(
+    getYearsOfExperience,
+    "experience"
+  );
 
   return (
     <CustomBarChart

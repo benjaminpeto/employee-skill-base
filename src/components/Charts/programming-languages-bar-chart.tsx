@@ -1,27 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import CustomBarChart from "@/components/Charts/bar-chart";
-import { ChartConfig } from "@/components/ui/chart";
-import { generateChartConfig, fetchChartData } from "@/utils/chartUtils";
 import { getProgrammingLanguages } from "@/utils/dbUtils";
-import { BarChartDataState } from "@/types/charts";
+import { useChartData } from "@/hooks/useChartData";
 
 export default function ProgrammingLanguagesBarChart() {
-  const [chartData, setChartData] = useState<BarChartDataState[]>([]);
-  const [chartConfig, setChartConfig] = useState<ChartConfig>({
-    languages: { label: "Languages" },
-  });
-
-  useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchChartData(getProgrammingLanguages);
-      setChartData(data);
-      setChartConfig(generateChartConfig(data, "languages"));
-    };
-
-    loadData();
-  }, []);
+  const { chartData, chartConfig } = useChartData(
+    getProgrammingLanguages,
+    "languages"
+  );
 
   return (
     <CustomBarChart

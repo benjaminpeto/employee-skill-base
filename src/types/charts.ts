@@ -3,7 +3,7 @@ import { ChartConfig } from "@/components/ui/chart";
 export interface DonutChartProps {
   title: string;
   description: string;
-  chartData: PieChartDataState[];
+  chartData: ChartDataState[];
   totalLabel: string;
   footerText: string;
   chartConfig: ChartConfig;
@@ -11,24 +11,19 @@ export interface DonutChartProps {
   footerParagraph?: string;
 }
 
-export interface PieChartDataState {
+export interface ChartDataState {
   label: string;
   value: number;
-  fill: string;
+  fill?: string;
 }
 
 export interface BarChartProps {
   title: string;
   description: string;
-  chartData: BarChartDataState[];
+  chartData: ChartDataState[];
   chartConfig: ChartConfig;
   footerText: string;
   footerParagraph: string;
-}
-
-export interface BarChartDataState {
-  label: string;
-  value: number;
 }
 
 export interface ProfileForAnalytics {

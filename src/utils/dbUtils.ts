@@ -80,7 +80,7 @@ export const getProjectAssignments = async () => {
   );
 
   return Object.entries(projectCounts).map(([project, count]) => ({
-    label: project,
+    label: project.charAt(0).toUpperCase() + project.slice(1),
     value: count,
   }));
 };

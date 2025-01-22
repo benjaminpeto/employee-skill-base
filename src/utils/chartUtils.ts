@@ -1,8 +1,9 @@
 import { ChartConfig } from "@/components/ui/chart";
-import { BarChartDataState } from "@/types/charts";
+import { ChartDataState } from "@/types/charts";
+import { getEmployeeCounts } from "./dbUtils";
 
 export const fetchChartData = async (
-  fetchFunction: () => Promise<BarChartDataState[]>
+  fetchFunction: () => Promise<ChartDataState[]>
 ) => {
   const data = await fetchFunction();
   return data.map((item, index) => ({
@@ -12,7 +13,7 @@ export const fetchChartData = async (
 };
 
 export const generateChartConfig = (
-  data: BarChartDataState[],
+  data: ChartDataState[],
   label: string
 ): ChartConfig => {
   const config: ChartConfig = {
@@ -29,4 +30,12 @@ export const generateChartConfig = (
   });
 
   return config;
+};
+
+export const fetchEmployeeData = async () => {
+  const { available, unavailable } = await getEmployeeCounts();
+  return [
+    { label: "Available", value: available },
+    { label: "Unavailable", value: unavailable },
+  ];
 };
