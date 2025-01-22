@@ -3,33 +3,9 @@
 import { useState, useEffect } from "react";
 import CustomBarChart from "@/components/Charts/bar-chart";
 import { ChartConfig } from "@/components/ui/chart";
+import { generateChartConfig, fetchChartData } from "@/utils/chartUtils";
 import { getTools } from "@/utils/dbUtils";
 import { BarChartDataState } from "@/types/charts";
-
-const fetchToolsData = async () => {
-  const data = await getTools();
-  return data.map((tool, index) => ({
-    ...tool,
-    fill: `hsl(var(--chart-${index + 1}))`,
-  }));
-};
-
-const generateChartConfig = (data: BarChartDataState[]): ChartConfig => {
-  const config: ChartConfig = {
-    tools: {
-      label: "Tools",
-    },
-  };
-
-  data.forEach((tool, index) => {
-    config[tool.label] = {
-      label: tool.label,
-      color: `hsl(var(--chart-${index + 1}))`,
-    };
-  });
-
-  return config;
-};
 
 export default function ToolsBarChart() {
   const [chartData, setChartData] = useState<BarChartDataState[]>([]);
@@ -39,9 +15,9 @@ export default function ToolsBarChart() {
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchToolsData();
+      const data = await fetchChartData(getTools);
       setChartData(data);
-      setChartConfig(generateChartConfig(data));
+      setChartConfig(generateChartConfig(data, "tools"));
     };
 
     loadData();

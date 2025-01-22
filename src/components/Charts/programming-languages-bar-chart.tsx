@@ -3,33 +3,9 @@
 import { useState, useEffect } from "react";
 import CustomBarChart from "@/components/Charts/bar-chart";
 import { ChartConfig } from "@/components/ui/chart";
+import { generateChartConfig, fetchChartData } from "@/utils/chartUtils";
 import { getProgrammingLanguages } from "@/utils/dbUtils";
 import { BarChartDataState } from "@/types/charts";
-
-const fetchProgrammingLanguagesData = async () => {
-  const data = await getProgrammingLanguages();
-  return data.map((language, index) => ({
-    ...language,
-    fill: `hsl(var(--chart-${index + 1}))`,
-  }));
-};
-
-const generateChartConfig = (data: BarChartDataState[]): ChartConfig => {
-  const config: ChartConfig = {
-    languages: {
-      label: "Languages",
-    },
-  };
-
-  data.forEach((language, index) => {
-    config[language.label] = {
-      label: language.label,
-      color: `hsl(var(--chart-${index + 1}))`,
-    };
-  });
-
-  return config;
-};
 
 export default function ProgrammingLanguagesBarChart() {
   const [chartData, setChartData] = useState<BarChartDataState[]>([]);
@@ -39,9 +15,9 @@ export default function ProgrammingLanguagesBarChart() {
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchProgrammingLanguagesData();
+      const data = await fetchChartData(getProgrammingLanguages);
       setChartData(data);
-      setChartConfig(generateChartConfig(data));
+      setChartConfig(generateChartConfig(data, "languages"));
     };
 
     loadData();

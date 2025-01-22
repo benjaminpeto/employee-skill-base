@@ -4,32 +4,8 @@ import { useState, useEffect } from "react";
 import CustomBarChart from "@/components/Charts/bar-chart";
 import { ChartConfig } from "@/components/ui/chart";
 import { getYearsOfExperience } from "@/utils/dbUtils";
+import { generateChartConfig, fetchChartData } from "@/utils/chartUtils";
 import { BarChartDataState } from "@/types/charts";
-
-const fetchYearsOfExperienceData = async () => {
-  const data = await getYearsOfExperience();
-  return data.map((experience, index) => ({
-    ...experience,
-    fill: `hsl(var(--chart-${index + 1}))`,
-  }));
-};
-
-const generateChartConfig = (data: BarChartDataState[]): ChartConfig => {
-  const config: ChartConfig = {
-    experience: {
-      label: "Experience",
-    },
-  };
-
-  data.forEach((experience, index) => {
-    config[experience.label] = {
-      label: experience.label,
-      color: `hsl(var(--chart-${index + 1}))`,
-    };
-  });
-
-  return config;
-};
 
 export default function YearsOfExperienceBarChart() {
   const [chartData, setChartData] = useState<BarChartDataState[]>([]);
@@ -39,9 +15,9 @@ export default function YearsOfExperienceBarChart() {
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchYearsOfExperienceData();
+      const data = await fetchChartData(getYearsOfExperience);
       setChartData(data);
-      setChartConfig(generateChartConfig(data));
+      setChartConfig(generateChartConfig(data, "experience"));
     };
 
     loadData();

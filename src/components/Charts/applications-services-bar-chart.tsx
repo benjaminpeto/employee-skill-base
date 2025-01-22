@@ -3,33 +3,9 @@
 import { useState, useEffect } from "react";
 import CustomBarChart from "@/components/Charts/bar-chart";
 import { ChartConfig } from "@/components/ui/chart";
+import { generateChartConfig, fetchChartData } from "@/utils/chartUtils";
 import { getApplicationsServices } from "@/utils/dbUtils";
 import { BarChartDataState } from "@/types/charts";
-
-const fetchApplicationsServicesData = async () => {
-  const data = await getApplicationsServices();
-  return data.map((service, index) => ({
-    ...service,
-    fill: `hsl(var(--chart-${index + 1}))`,
-  }));
-};
-
-const generateChartConfig = (data: BarChartDataState[]): ChartConfig => {
-  const config: ChartConfig = {
-    services: {
-      label: "Services",
-    },
-  };
-
-  data.forEach((service, index) => {
-    config[service.label] = {
-      label: service.label,
-      color: `hsl(var(--chart-${index + 1}))`,
-    };
-  });
-
-  return config;
-};
 
 export default function ApplicationsServicesBarChart() {
   const [chartData, setChartData] = useState<BarChartDataState[]>([]);
@@ -39,9 +15,9 @@ export default function ApplicationsServicesBarChart() {
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchApplicationsServicesData();
+      const data = await fetchChartData(getApplicationsServices);
       setChartData(data);
-      setChartConfig(generateChartConfig(data));
+      setChartConfig(generateChartConfig(data, "services"));
     };
 
     loadData();
