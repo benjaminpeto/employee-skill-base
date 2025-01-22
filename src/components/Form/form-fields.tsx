@@ -18,9 +18,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { FormFieldsProps } from "@/schemas/formSchema";
+import Link from "next/link";
 
 export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
     <FormField
       control={form.control}
       name="name"
@@ -61,6 +62,10 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
           <FormControl>
             <Input placeholder="Senior Developer" {...field} />
           </FormControl>
+          <FormDescription>
+            Enter your current job title. This helps in identifying your role
+            and responsibilities.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -78,6 +83,10 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
               onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
             />
           </FormControl>
+          <FormDescription>
+            Specify the number of years you have been working in the industry.
+            This gives an idea of your experience level.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -92,7 +101,9 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
-            Enter the tools you use, separated by commas.
+            List the tools you are proficient in, separated by commas. This
+            helps in highlighting your technical skills.<br></br>For example:
+            React, Laravel, Docker, NextJS, etc.
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -108,7 +119,9 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
-            Enter the programming languages you know, separated by commas.
+            List programming languages you are proficient in, separated by
+            commas. This helps in highlighting your technical skills.
+            <br></br>For example: JavaScript, Python, Ruby, etc.
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -124,8 +137,10 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
-            Enter the applications or services you&apos;re familiar with,
-            separated by commas.
+            Mention the applications or services you are familiar with. This can
+            include cloud services, software, and other tools you use in your
+            work, separated by commas.<br></br>For example: AWS, Azure, Google
+            Cloud, etc.
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -141,7 +156,8 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
-            Enter the languages you speak, separated by commas.
+            List the languages you speak, separated by commas. This can be
+            useful for roles that require multilingual communication.
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -240,6 +256,10 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
               </SelectGroup>
             </SelectContent>
           </Select>
+          <FormDescription>
+            Select your timezone. This is important for coordinating work across
+            different regions.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -258,7 +278,8 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
             />
           </FormControl>
           <FormDescription>
-            Only enter your current project if you&apos;re working on one.
+            If you are currently working on a project, mention its name. If not,
+            you can leave this field blank.
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -299,6 +320,9 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
               <SelectItem value="unavailable">Unavailable</SelectItem>
             </SelectContent>
           </Select>
+          <FormDescription>
+            Indicate whether you are available for new projects or not.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -316,6 +340,10 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
               value={field.value ?? ""}
             />
           </FormControl>
+          <FormDescription>
+            Provide a link to your LinkedIn profile. This allows others to view
+            your professional network and endorsements.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -334,6 +362,18 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
               onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
             />
           </FormControl>
+          <FormDescription>
+            Enter your experience level, ranging from 8 to 14. Refer to the{" "}
+            <Link
+              href="https://secretsourceweb.github.io/professional-ladder/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              professional ladder{" "}
+            </Link>
+            for guidance.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -347,6 +387,10 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
           <FormControl>
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
+          <FormDescription>
+            Write a brief bio about yourself, including your interests and
+            background.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -360,6 +404,11 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
           <FormControl>
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
+          <FormDescription>
+            List your previous job roles and the duration you worked in each
+            role.<br></br>For example: Senior Developer at Company X from 2018
+            to 2020, Software Engineer at Company Y from 2016 to 2018, etc.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -369,10 +418,14 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
       name="qualifications"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Qualifications</FormLabel>
+          <FormLabel>Education and professional qualifications</FormLabel>
           <FormControl>
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
+          <FormDescription>
+            List your education and professional qualifications such as
+            certification, diploma, degree, online courses, etc.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -386,6 +439,10 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
           <FormControl>
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
+          <FormDescription>
+            List your main achievements, such as projects you&apos;ve worked on,
+            awards you&apos;ve won, etc.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -399,6 +456,18 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
           <FormControl>
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
+          <FormDescription>
+            List your top three core competencies, referring to the{" "}
+            <Link
+              href="https://docs.google.com/document/d/1ooBkerty1ZBvRdK2ij7ETCY-JKwP0PCefPko78RqYMc/edit?tab=t.0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              provided document
+            </Link>{" "}
+            for guidance.
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}

@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
+import Link from "next/link";
 
 interface EmployeeProfileProps {
   profile: Profile;
@@ -41,13 +42,13 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
             </h2>
             <p className="text-sm text-gray-500">{profile.email}</p>
             {profile.linkedin_url && (
-              <a
+              <Link
                 href={profile.linkedin_url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Linkedin className="w-5 h-5 inline-block text-gray-500 hover:text-gray-200 duration-300" />
-              </a>
+              </Link>
             )}
           </div>
         </CardHeader>

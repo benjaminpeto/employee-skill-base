@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { useSession } from "@/hooks/useSession";
 import { UserInfo } from "@/types/profile";
 
@@ -18,10 +18,7 @@ export function ProfileCard() {
 
   return (
     <Card className="mb-6">
-      <CardHeader>
-        <CardTitle>My Profile</CardTitle>
-      </CardHeader>
-      <CardContent className="flex items-center space-x-4">
+      <CardContent className="flex items-center space-x-4 pt-7">
         <Avatar className="w-20 h-20">
           <AvatarImage
             className="rounded-full"
