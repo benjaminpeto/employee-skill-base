@@ -30,3 +30,14 @@ export interface BarChartDataState {
   label: string;
   value: number;
 }
+
+export interface ProfileForAnalytics {
+  availability?: boolean;
+  current_project?: string;
+  spoken_languages?: string[];
+  programming_languages?: string[];
+  applications_services?: string[];
+  tools?: string[];
+  years_of_experience?: number;
+  job_title?: string;
+}

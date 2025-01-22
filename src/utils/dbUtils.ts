@@ -1,4 +1,44 @@
 import { createClient } from "@/lib/supabase/supabaseClient";
+import { ProfileForAnalytics } from "@/types/charts";
+
+const fetchDataAndSanitize = async (
+  column: keyof ProfileForAnalytics,
+  sanitizeFn: (value: string) => string
+) => {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("profiles").select(column);
+
+  if (error) {
+    console.error(`Error fetching ${column} data`, error);
+    return [];
+  }
+
+  const counts = data.reduce((acc: { [key: string]: number }, profile) => {
+    const values = (profile as ProfileForAnalytics)[column];
+    if (Array.isArray(values)) {
+      values.forEach((value) => {
+        const sanitizedValue = sanitizeFn(value);
+        acc[sanitizedValue] = (acc[sanitizedValue] || 0) + 1;
+      });
+    } else if (typeof values === "string") {
+      const sanitizedValue = sanitizeFn(values);
+      acc[sanitizedValue] = (acc[sanitizedValue] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return Object.entries(counts).map(([label, value]) => ({
+    label,
+    value,
+  }));
+};
+
+const sanitizeString = (value: string) => {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 export const getEmployeeCounts = async () => {
   const supabase = createClient();
@@ -41,153 +81,6 @@ export const getProjectAssignments = async () => {
 
   return Object.entries(projectCounts).map(([project, count]) => ({
     label: project,
-    value: count,
-  }));
-};
-
-export const getSpokenLanguages = async () => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("spoken_languages");
-
-  if (error) {
-    console.error("Error fetching spoken languages data", error);
-    return [];
-  }
-
-  const sanitizeLanguage = (language: string) => {
-    return language
-      .trim()
-      .toLowerCase()
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const languageCounts = data.reduce(
-    (acc: { [key: string]: number }, profile) => {
-      const languages = profile.spoken_languages;
-      if (languages) {
-        languages.forEach((language: string) => {
-          const sanitizedLanguage = sanitizeLanguage(language);
-          acc[sanitizedLanguage] = (acc[sanitizedLanguage] || 0) + 1;
-        });
-      }
-      return acc;
-    },
-    {}
-  );
-
-  return Object.entries(languageCounts).map(([language, count]) => ({
-    label: language,
-    value: count,
-  }));
-};
-
-export const getProgrammingLanguages = async () => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("programming_languages");
-
-  if (error) {
-    console.error("Error fetching programming languages data", error);
-    return [];
-  }
-
-  const sanitizeLanguage = (language: string) => {
-    return language
-      .trim()
-      .toLowerCase()
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const languageCounts = data.reduce(
-    (acc: { [key: string]: number }, profile) => {
-      const languages = profile.programming_languages;
-      if (languages) {
-        languages.forEach((language: string) => {
-          const sanitizedLanguage = sanitizeLanguage(language);
-          acc[sanitizedLanguage] = (acc[sanitizedLanguage] || 0) + 1;
-        });
-      }
-      return acc;
-    },
-    {}
-  );
-
-  return Object.entries(languageCounts).map(([language, count]) => ({
-    label: language,
-    value: count,
-  }));
-};
-
-export const getApplicationsServices = async () => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("applications_services");
-
-  if (error) {
-    console.error("Error fetching applications/services data", error);
-    return [];
-  }
-
-  const sanitizeService = (service: string) => {
-    return service
-      .trim()
-      .toLowerCase()
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const serviceCounts = data.reduce(
-    (acc: { [key: string]: number }, profile) => {
-      const services = profile.applications_services;
-      if (services) {
-        services.forEach((service: string) => {
-          const sanitizedService = sanitizeService(service);
-          acc[sanitizedService] = (acc[sanitizedService] || 0) + 1;
-        });
-      }
-      return acc;
-    },
-    {}
-  );
-
-  return Object.entries(serviceCounts).map(([service, count]) => ({
-    label: service,
-    value: count,
-  }));
-};
-
-export const getTools = async () => {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("profiles").select("tools");
-
-  if (error) {
-    console.error("Error fetching tools data", error);
-    return [];
-  }
-
-  const sanitizeTool = (tool: string) => {
-    return tool
-      .trim()
-      .toLowerCase()
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const toolCounts = data.reduce((acc: { [key: string]: number }, profile) => {
-    const tools = profile.tools;
-    if (tools) {
-      tools.forEach((tool: string) => {
-        const sanitizedTool = sanitizeTool(tool);
-        acc[sanitizedTool] = (acc[sanitizedTool] || 0) + 1;
-      });
-    }
-    return acc;
-  }, {});
-
-  return Object.entries(toolCounts).map(([tool, count]) => ({
-    label: tool,
     value: count,
   }));
 };
@@ -236,33 +129,22 @@ export const getYearsOfExperience = async () => {
     .filter((range) => range.value > 0);
 };
 
+export const getSpokenLanguages = async () => {
+  return fetchDataAndSanitize("spoken_languages", sanitizeString);
+};
+
+export const getProgrammingLanguages = async () => {
+  return fetchDataAndSanitize("programming_languages", sanitizeString);
+};
+
+export const getApplicationsServices = async () => {
+  return fetchDataAndSanitize("applications_services", sanitizeString);
+};
+
+export const getTools = async () => {
+  return fetchDataAndSanitize("tools", sanitizeString);
+};
+
 export const getJobTitles = async () => {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("profiles").select("job_title");
-
-  if (error) {
-    console.error("Error fetching job titles data", error);
-    return [];
-  }
-
-  const sanitizeTitle = (title: string) => {
-    return title
-      .trim()
-      .toLowerCase()
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const titleCounts = data.reduce((acc: { [key: string]: number }, profile) => {
-    const title = profile.job_title;
-    if (title) {
-      const sanitizedTitle = sanitizeTitle(title);
-      acc[sanitizedTitle] = (acc[sanitizedTitle] || 0) + 1;
-    }
-    return acc;
-  }, {});
-
-  return Object.entries(titleCounts).map(([title, count]) => ({
-    label: title,
-    value: count,
-  }));
+  return fetchDataAndSanitize("job_title", sanitizeString);
 };
