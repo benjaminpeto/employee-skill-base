@@ -67,6 +67,13 @@ export function DeveloperProfileForm() {
           timezone: data.timezone || "",
           current_project: data.current_project || "",
           availability: data.availability ? "available" : "unavailable",
+          linkedin_url: data.linkedin_url || null,
+          experience_level: data.experience_level || null,
+          bio: data.bio || null,
+          professional_experience: data.professional_experience || null,
+          qualifications: data.qualifications || null,
+          main_achievements: data.main_achievements || null,
+          core_competencies: data.core_competencies || null,
         };
 
         form.reset(formData, {
@@ -90,9 +97,13 @@ export function DeveloperProfileForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormFields form={form} />
-        <Button type="submit" disabled={!isDirty || isSaving}>
+        <Button
+          className="flex items-center justify-center mx-auto w-1/4"
+          type="submit"
+          disabled={!isDirty || isSaving}
+        >
           {isSaving ? (
             <>
               <LoaderCircle className="w-4 h-4 animate-spin" /> Saving...

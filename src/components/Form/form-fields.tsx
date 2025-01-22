@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FormFieldsProps } from "@/schemas/formSchema";
 
 export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
     <FormField
       control={form.control}
       name="name"
@@ -89,7 +89,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
         <FormItem>
           <FormLabel>Tools</FormLabel>
           <FormControl>
-            <Textarea {...field} />
+            <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
             Enter the tools you use, separated by commas.
@@ -105,7 +105,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
         <FormItem>
           <FormLabel>Programming Languages</FormLabel>
           <FormControl>
-            <Textarea {...field} />
+            <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
             Enter the programming languages you know, separated by commas.
@@ -121,7 +121,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
         <FormItem>
           <FormLabel>Applications/Services</FormLabel>
           <FormControl>
-            <Textarea {...field} />
+            <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
             Enter the applications or services you&apos;re familiar with,
@@ -138,7 +138,7 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
         <FormItem>
           <FormLabel>Spoken Languages</FormLabel>
           <FormControl>
-            <Textarea {...field} />
+            <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
             Enter the languages you speak, separated by commas.
@@ -299,6 +299,106 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
               <SelectItem value="unavailable">Unavailable</SelectItem>
             </SelectContent>
           </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="linkedin_url"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>LinkedIn URL</FormLabel>
+          <FormControl>
+            <Input
+              placeholder="https://www.linkedin.com/in/your-profile"
+              {...field}
+              value={field.value ?? ""}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="experience_level"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Experience Level</FormLabel>
+          <FormControl>
+            <Input
+              type="number"
+              {...field}
+              value={field.value ?? 0}
+              onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="bio"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Bio</FormLabel>
+          <FormControl>
+            <Textarea {...field} value={field.value ?? ""} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="professional_experience"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Professional Experience</FormLabel>
+          <FormControl>
+            <Textarea {...field} value={field.value ?? ""} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="qualifications"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Qualifications</FormLabel>
+          <FormControl>
+            <Textarea {...field} value={field.value ?? ""} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="main_achievements"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Main Achievements</FormLabel>
+          <FormControl>
+            <Textarea {...field} value={field.value ?? ""} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <FormField
+      control={form.control}
+      name="core_competencies"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Core Competencies</FormLabel>
+          <FormControl>
+            <Textarea {...field} value={field.value ?? ""} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}

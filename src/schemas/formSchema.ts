@@ -25,6 +25,28 @@ export const formSchema = z.object({
   timezone: z.string(),
   current_project: z.string().nullable(),
   availability: z.enum(["available", "unavailable"]),
+  linkedin_url: z
+    .string()
+    .url()
+    .regex(/^https:\/\/(www\.)?linkedin\.com\/.*$/, {
+      message: "Must be a valid LinkedIn URL.",
+    })
+    .nullable(),
+  experience_level: z
+    .number()
+    .int()
+    .min(8, {
+      message: "Experience level must be at least 8.",
+    })
+    .max(14, {
+      message: "Experience level must be at most 14.",
+    })
+    .nullable(),
+  bio: z.string().nullable(),
+  professional_experience: z.string().nullable(),
+  qualifications: z.string().nullable(),
+  main_achievements: z.string().nullable(),
+  core_competencies: z.string().nullable(),
 });
 
 export interface FormFieldsProps {

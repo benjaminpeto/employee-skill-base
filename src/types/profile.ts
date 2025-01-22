@@ -12,6 +12,13 @@ export interface Profile {
   timezone: string;
   current_project: string;
   availability: boolean;
+  linkedin_url: string | null;
+  experience_level: number | null;
+  bio: string | null;
+  professional_experience: string | null;
+  qualifications: string | null;
+  main_achievements: string | null;
+  core_competencies: string | null;
 }
 
 export interface UserInfo {

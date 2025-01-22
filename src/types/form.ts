@@ -12,6 +12,13 @@ export interface FormDefaultValues {
   timezone: string;
   current_project: string | null;
   availability: "available" | "unavailable";
+  linkedin_url: string | null;
+  experience_level: number | null;
+  bio: string | null;
+  professional_experience: string | null;
+  qualifications: string | null;
+  main_achievements: string | null;
+  core_competencies: string | null;
 }
 
 export const defaultValues: FormDefaultValues = {
@@ -28,6 +35,13 @@ export const defaultValues: FormDefaultValues = {
   timezone: "",
   current_project: null,
   availability: "available",
+  linkedin_url: null,
+  experience_level: 0,
+  bio: null,
+  professional_experience: null,
+  qualifications: null,
+  main_achievements: null,
+  core_competencies: null,
 };
 
 export interface SanitizedFromValues {
@@ -44,4 +58,11 @@ export interface SanitizedFromValues {
   timezone: string;
   current_project: string | null;
   availability: "available" | "unavailable";
+  linkedin_url: string | null;
+  experience_level: number | null;
+  bio: string | null;
+  professional_experience: string | null;
+  qualifications: string | null;
+  main_achievements: string | null;
+  core_competencies: string | null;
 }

@@ -4,11 +4,11 @@ import { useRef } from "react";
 import { Profile } from "@/types/profile";
 import { getCountryEmoji } from "@/utils/getCountryEmoji";
 import { useExportPDF } from "@/hooks/useExportPDF";
-
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Linkedin } from "lucide-react";
 
 interface EmployeeProfileProps {
   profile: Profile;
@@ -40,18 +40,19 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
               {profile.job_title || "Unknown position"}
             </h2>
             <p className="text-sm text-gray-500">{profile.email}</p>
+            {profile.linkedin_url && (
+              <a
+                href={profile.linkedin_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin className="w-5 h-5 inline-block text-gray-500 hover:text-gray-200 duration-300" />
+              </a>
+            )}
           </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {profile.years_of_experience && (
-              <div>
-                <h3 className="text-gray-500 text-lg font-semibold">
-                  Years of Experience
-                </h3>
-                <p>{profile.years_of_experience}</p>
-              </div>
-            )}
             {profile.tools && profile.tools.length > 0 && (
               <div>
                 <h3 className="text-gray-500 text-lg font-semibold">Tools</h3>
@@ -116,12 +117,20 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
                   </div>
                 </div>
               )}
-            {profile.timezone && (
+            {profile.years_of_experience && (
               <div>
                 <h3 className="text-gray-500 text-lg font-semibold">
-                  Timezone
+                  Years of Experience
                 </h3>
-                <p className="uppercase">{profile.timezone}</p>
+                <p>{profile.years_of_experience}</p>
+              </div>
+            )}
+            {profile.experience_level && (
+              <div>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Experience Level
+                </h3>
+                <p>{profile.experience_level}</p>
               </div>
             )}
             <div>
@@ -136,6 +145,52 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
               </h3>
               <p>{profile.availability ? "Available" : "Not Available"}</p>
             </div>
+            {profile.bio && (
+              <div>
+                <h3 className="text-gray-500 text-lg font-semibold">Bio</h3>
+                <p>{profile.bio}</p>
+              </div>
+            )}
+            {profile.professional_experience && (
+              <div>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Professional Experience
+                </h3>
+                <p>{profile.professional_experience}</p>
+              </div>
+            )}
+            {profile.qualifications && (
+              <div>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Qualifications
+                </h3>
+                <p>{profile.qualifications}</p>
+              </div>
+            )}
+            {profile.main_achievements && (
+              <div>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Main Achievements
+                </h3>
+                <p>{profile.main_achievements}</p>
+              </div>
+            )}
+            {profile.core_competencies && (
+              <div>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Core Competencies
+                </h3>
+                <p>{profile.core_competencies}</p>
+              </div>
+            )}
+            {profile.timezone && (
+              <div>
+                <h3 className="text-gray-500 text-lg font-semibold">
+                  Timezone
+                </h3>
+                <p className="uppercase">{profile.timezone}</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
