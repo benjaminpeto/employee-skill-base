@@ -13,7 +13,7 @@ export interface Profile {
   current_project: string;
   availability: boolean;
   linkedin_url: string | null;
-  experience_level: number | null;
+  experience_level: number;
   bio: string | null;
   professional_experience: string | null;
   qualifications: string | null;

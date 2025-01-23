@@ -44,6 +44,10 @@ export const columns: ColumnDef<Profile>[] = [
         {row.original.experience_level}
       </span>
     ),
+    meta: {
+      filterVariant: "range",
+    },
+    filterFn: "inNumberRange",
   },
   {
     accessorKey: "years_of_experience",
@@ -56,6 +60,7 @@ export const columns: ColumnDef<Profile>[] = [
     meta: {
       filterVariant: "range",
     },
+    filterFn: "inNumberRange",
   },
   {
     accessorKey: "tools",

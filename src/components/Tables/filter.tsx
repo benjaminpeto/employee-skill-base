@@ -15,7 +15,8 @@ export default function Filter({
   column: Column<Profile, unknown>;
 }) {
   const columnFilterValue = column.getFilterValue();
-  const { filterVariant } = column.columnDef.meta ?? {};
+  const { filterVariant } =
+    (column.columnDef.meta as { filterVariant?: string }) ?? {};
 
   return filterVariant === "range" ? (
     <div>
@@ -25,7 +26,7 @@ export default function Filter({
           value={(columnFilterValue as [number, number])?.[0] ?? ""}
           onChange={(e) =>
             column.setFilterValue((old: [number, number]) => [
-              e.target.value,
+              Number(e.target.value),
               old?.[1],
             ])
           }
@@ -37,7 +38,7 @@ export default function Filter({
           onChange={(e) =>
             column.setFilterValue((old: [number, number]) => [
               old?.[0],
-              e.target.value,
+              Number(e.target.value),
             ])
           }
           placeholder={`Max`}
