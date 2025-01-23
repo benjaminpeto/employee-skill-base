@@ -1,3 +1,8 @@
+import Link from "next/link";
+import CompetencySheet from "./competency-sheet";
+import { FormFieldsProps } from "@/schemas/formSchema";
+import { FormFieldWrapper } from "./form-field-wrapper";
+import { Textarea } from "@/components/ui/textarea";
 import {
   FormControl,
   FormDescription,
@@ -6,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -16,156 +20,73 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { FormFieldsProps } from "@/schemas/formSchema";
-import Link from "next/link";
+import { FormFieldNames } from "@/types/form";
 
 export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-    <FormField
-      control={form.control}
-      name="name"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Name</FormLabel>
-          <FormControl>
-            <Input placeholder="John Doe" {...field} disabled />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
+    <FormFieldWrapper
+      name={FormFieldNames.NAME}
+      label="Name"
+      placeholder="John Doe"
+      form={form}
+      disabled
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.EMAIL}
+      label="Email"
+      placeholder="john@example.com"
+      type="email"
+      form={form}
+      disabled
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.JOB_TITLE}
+      label="Job Title"
+      placeholder="Senior Developer"
+      description="Enter your current job title. This helps in identifying your role and responsibilities."
+      form={form}
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.YEARS_OF_EXPERIENCE}
+      label="Years of Experience"
+      type="number"
+      form={form}
+      description="Specify the number of years you have been working in the industry. This gives an idea of your experience level."
+      onChange={(e) =>
+        form.setValue("years_of_experience", parseInt(e.target.value, 10))
+      }
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.TOOLS}
+      label="Tools"
+      component={Textarea}
+      form={form}
+      description="List the tools you are proficient in, separated by commas. This helps in highlighting your technical skills. For example: React, Laravel, Docker, NextJS, etc."
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.PROGRAMMING_LANGUAGES}
+      label="Programming Languages"
+      component={Textarea}
+      form={form}
+      description="List programming languages you are proficient in, separated by commas. This helps in highlighting your technical skills. For example: JavaScript, Python, Ruby, etc."
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.APPLICATIONS_SERVICES}
+      label="Applications/Services"
+      component={Textarea}
+      form={form}
+      description="Mention the applications or services you are familiar with. This can include cloud services, software, and other tools you use in your work, separated by commas. For example: AWS, Azure, Google Cloud, etc."
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.SPOKEN_LANGUAGES}
+      label="Spoken Languages"
+      component={Textarea}
+      form={form}
+      description="List the languages you speak, separated by commas. This can be useful for roles that require multilingual communication."
     />
     <FormField
       control={form.control}
-      name="email"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input
-              type="email"
-              placeholder="john@example.com"
-              {...field}
-              disabled
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="job_title"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Job Title</FormLabel>
-          <FormControl>
-            <Input placeholder="Senior Developer" {...field} />
-          </FormControl>
-          <FormDescription>
-            Enter your current job title. This helps in identifying your role
-            and responsibilities.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="years_of_experience"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Years of Experience</FormLabel>
-          <FormControl>
-            <Input
-              type="number"
-              {...field}
-              onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
-            />
-          </FormControl>
-          <FormDescription>
-            Specify the number of years you have been working in the industry.
-            This gives an idea of your experience level.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="tools"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Tools</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            List the tools you are proficient in, separated by commas. This
-            helps in highlighting your technical skills.<br></br>For example:
-            React, Laravel, Docker, NextJS, etc.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="programming_languages"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Programming Languages</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            List programming languages you are proficient in, separated by
-            commas. This helps in highlighting your technical skills.
-            <br></br>For example: JavaScript, Python, Ruby, etc.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="applications_services"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Applications/Services</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            Mention the applications or services you are familiar with. This can
-            include cloud services, software, and other tools you use in your
-            work, separated by commas.<br></br>For example: AWS, Azure, Google
-            Cloud, etc.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="spoken_languages"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Spoken Languages</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            List the languages you speak, separated by commas. This can be
-            useful for roles that require multilingual communication.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="timezone"
+      name={FormFieldNames.TIMEZONE}
       render={({ field }) => (
         <FormItem>
           <FormLabel>Timezone</FormLabel>
@@ -264,30 +185,15 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
         </FormItem>
       )}
     />
-    <FormField
-      control={form.control}
-      name="current_project"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Current Project</FormLabel>
-          <FormControl>
-            <Input
-              placeholder="Project Name (optional)"
-              {...field}
-              value={field.value ?? ""}
-            />
-          </FormControl>
-          <FormDescription>
-            If you are currently working on a project, mention its name. If not,
-            you can leave this field blank.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
+    <FormFieldWrapper
+      name={FormFieldNames.CURRENT_PROJECT}
+      label="Current Project"
+      placeholder="Project Name (optional)"
+      form={form}
     />
     <FormField
       control={form.control}
-      name="availability"
+      name={FormFieldNames.AVAILABILITY}
       render={({ field }) => (
         <FormItem>
           <FormLabel>Availability</FormLabel>
@@ -327,146 +233,74 @@ export const FormFields: React.FC<FormFieldsProps> = ({ form }) => (
         </FormItem>
       )}
     />
-    <FormField
-      control={form.control}
-      name="linkedin_url"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>LinkedIn URL</FormLabel>
-          <FormControl>
-            <Input
-              placeholder="https://www.linkedin.com/in/your-profile"
-              {...field}
-              value={field.value ?? ""}
-            />
-          </FormControl>
-          <FormDescription>
-            Provide a link to your LinkedIn profile. This allows others to view
-            your professional network and endorsements.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
+    <FormFieldWrapper
+      name={FormFieldNames.LINKEDIN_URL}
+      label="LinkedIn URL"
+      placeholder="https://www.linkedin.com/in/your-profile"
+      form={form}
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.EXPERIENCE_LEVEL}
+      label="Experience Level"
+      type="number"
+      form={form}
+      description={
+        <>
+          Enter your experience level, ranging from 8 to 14. Refer to the{" "}
+          <Link
+            href="https://secretsourceweb.github.io/professional-ladder/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            professional ladder{" "}
+          </Link>
+          for guidance.
+        </>
+      }
+      onChange={(e) =>
+        form.setValue("experience_level", parseInt(e.target.value, 10))
+      }
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.BIO}
+      label="Bio"
+      component={Textarea}
+      form={form}
+      description="Write a brief bio about yourself, including your interests and background."
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.PROFESSIONAL_EXPERIENCE}
+      label="Professional Experience"
+      component={Textarea}
+      form={form}
+      description="List your previous job roles and the duration you worked in each role. For example: Senior Developer at Company X from 2018 to 2020, Software Engineer at Company Y from 2016 to 2018, etc."
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.QUALIFICATIONS}
+      label="Education and professional qualifications"
+      component={Textarea}
+      form={form}
+      description="List your education and professional qualifications such as certification, diploma, degree, online courses, etc."
+    />
+    <FormFieldWrapper
+      name={FormFieldNames.MAIN_ACHIEVEMENTS}
+      label="Main Achievements"
+      component={Textarea}
+      form={form}
+      description="List your main achievements, such as projects you've worked on, awards you've won, etc."
     />
     <FormField
       control={form.control}
-      name="experience_level"
+      name={FormFieldNames.CORE_COMPETENCIES}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Experience Level</FormLabel>
-          <FormControl>
-            <Input
-              type="number"
-              {...field}
-              value={field.value ?? 0}
-              onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
-            />
-          </FormControl>
-          <FormDescription>
-            Enter your experience level, ranging from 8 to 14. Refer to the{" "}
-            <Link
-              href="https://secretsourceweb.github.io/professional-ladder/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              professional ladder{" "}
-            </Link>
-            for guidance.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="bio"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Bio</FormLabel>
+          <CompetencySheet />
           <FormControl>
             <Textarea {...field} value={field.value ?? ""} />
           </FormControl>
           <FormDescription>
-            Write a brief bio about yourself, including your interests and
-            background.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="professional_experience"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Professional Experience</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            List your previous job roles and the duration you worked in each
-            role.<br></br>For example: Senior Developer at Company X from 2018
-            to 2020, Software Engineer at Company Y from 2016 to 2018, etc.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="qualifications"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Education and professional qualifications</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            List your education and professional qualifications such as
-            certification, diploma, degree, online courses, etc.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="main_achievements"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Main Achievements</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            List your main achievements, such as projects you&apos;ve worked on,
-            awards you&apos;ve won, etc.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-    <FormField
-      control={form.control}
-      name="core_competencies"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Core Competencies</FormLabel>
-          <FormControl>
-            <Textarea {...field} value={field.value ?? ""} />
-          </FormControl>
-          <FormDescription>
-            List your top three core competencies, referring to the{" "}
-            <Link
-              href="https://docs.google.com/document/d/1ooBkerty1ZBvRdK2ij7ETCY-JKwP0PCefPko78RqYMc/edit?tab=t.0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              provided document
-            </Link>{" "}
-            for guidance.
+            List your top three core competencies.
           </FormDescription>
           <FormMessage />
         </FormItem>
