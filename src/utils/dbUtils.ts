@@ -192,3 +192,32 @@ export const getTools = async () => {
 export const getJobTitles = async () => {
   return fetchDataAndSanitize("job_title", sanitizeString);
 };
+
+/**
+ * Fetches and sanitizes the experience level data from the "profiles" table.
+ * @returns An array of objects with experience level labels and their corresponding counts.
+ */
+export const getExperienceLevels = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("experience_level");
+
+  if (error) {
+    console.error("Error fetching experience level data", error);
+    return [];
+  }
+
+  const counts = data.reduce((acc: { [key: string]: number }, profile) => {
+    const level = profile.experience_level;
+    if (level !== null && level !== undefined) {
+      acc[level] = (acc[level] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return Object.entries(counts).map(([label, value]) => ({
+    label,
+    value,
+  }));
+};

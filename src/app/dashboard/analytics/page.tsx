@@ -1,4 +1,5 @@
 import ApplicationsServicesBarChart from "@/components/Charts/applications-services-bar-chart";
+import ExperienceLevelBarChart from "@/components/Charts/experience-level-bar-chart";
 import JobTitlesBarChart from "@/components/Charts/job-titles-bar-chart";
 import LanguagesPieChart from "@/components/Charts/languages-pie-chart";
 import ProgrammingLanguagesBarChart from "@/components/Charts/programming-languages-bar-chart";
@@ -19,9 +20,8 @@ export default async function AnalyticsPage() {
       <div className="grid grid-cols-2 gap-4 my-4">
         <ProgrammingLanguagesBarChart />
         <ApplicationsServicesBarChart />
-      </div>
-      <ToolsBarChart />
-      <div className="grid grid-cols-2 gap-4 mt-4">
+        <ExperienceLevelBarChart />
+        <ToolsBarChart />
         <YearsOfExperienceBarChart />
         <JobTitlesBarChart />
       </div>

@@ -35,4 +35,5 @@ export interface ProfileForAnalytics {
   tools?: string[];
   years_of_experience?: number;
   job_title?: string;
+  experience_level?: number;
 }
