@@ -37,6 +37,13 @@ export const columns: ColumnDef<Profile>[] = [
     ),
   },
   {
+    accessorKey: "experience_level",
+    header: "Experience Level",
+    cell: ({ row }) => (
+      <span className="font-bold">{row.original.experience_level}</span>
+    ),
+  },
+  {
     accessorKey: "years_of_experience",
     header: "Years of Experience",
     cell: ({ row }) => (
