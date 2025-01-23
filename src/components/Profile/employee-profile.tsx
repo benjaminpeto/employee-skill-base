@@ -24,7 +24,7 @@ export default function EmployeeProfile({ profile }: EmployeeProfileProps) {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-4">
       <Card ref={profileRef}>
         <CardHeader className="flex flex-col items-center space-y-4 mb-4">
           <Avatar className="w-20 h-20">
