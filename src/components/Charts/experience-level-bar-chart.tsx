@@ -16,8 +16,8 @@ export default function ExperienceLevelBarChart() {
       description="Experience levels of employees"
       chartData={chartData}
       chartConfig={chartConfig}
-      footerText="Total experience levels of employees."
-      footerParagraph="Showing all experience levels"
+      footerText="Experience level by the professional ladder."
+      footerParagraph="In a range between 8-14."
     />
   );
 }

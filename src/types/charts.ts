@@ -23,7 +23,7 @@ export interface BarChartProps {
   chartData: ChartDataState[];
   chartConfig: ChartConfig;
   footerText: string;
-  footerParagraph: string;
+  footerParagraph?: string;
 }
 
 export interface ProfileForAnalytics {

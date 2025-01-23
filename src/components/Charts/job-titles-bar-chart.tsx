@@ -3,9 +3,14 @@
 import CustomBarChart from "@/components/Charts/bar-chart";
 import { getJobTitles } from "@/utils/dbUtils";
 import { useChartData } from "@/hooks/useChartData";
+import { useMemo } from "react";
 
 export default function JobTitlesBarChart() {
   const { chartData, chartConfig } = useChartData(getJobTitles, "titles");
+
+  const totalTitles = useMemo(() => {
+    return chartData.length;
+  }, [chartData]);
 
   return (
     <CustomBarChart
@@ -13,8 +18,7 @@ export default function JobTitlesBarChart() {
       description="Job titles employees have"
       chartData={chartData}
       chartConfig={chartConfig}
-      footerText="Total job titles known by employees."
-      footerParagraph="Showing all job titles"
+      footerText={`${totalTitles} different job titles held by employees.`}
     />
   );
 }

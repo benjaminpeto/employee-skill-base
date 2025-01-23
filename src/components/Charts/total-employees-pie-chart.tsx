@@ -21,12 +21,11 @@ export default function DonutTotalEmployeesChart() {
       description="Current"
       chartData={chartData}
       totalLabel="Employees"
-      footerText={`Currently ${
-        chartData.find((data) => data.label === "Unavailable")?.value
-      } employees are available.`}
+      footerText={`${
+        chartData.find((data) => data.label === "Available")?.value
+      } employees available.`}
       chartConfig={chartConfig}
       totalValue={totalEmployees}
-      footerParagraph="Showing all employees"
     />
   );
 }

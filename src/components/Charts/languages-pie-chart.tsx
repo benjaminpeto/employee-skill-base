@@ -24,7 +24,6 @@ export default function LanguagesPieChart() {
       footerText={`Total languages spoken by the team.`}
       chartConfig={chartConfig}
       totalValue={totalLanguages}
-      footerParagraph="Showing all languages"
     />
   );
 }

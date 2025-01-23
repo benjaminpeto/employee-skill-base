@@ -154,6 +154,27 @@ export const getYearsOfExperience = async () => {
 };
 
 /**
+ * Calculates the total years of experience of all employees.
+ * @returns The total years of experience.
+ */
+export const calculateTotalYearsOfExperience = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("years_of_experience");
+
+  if (error) {
+    console.error("Error fetching years of experience data", error);
+    return 0;
+  }
+
+  return data.reduce(
+    (sum, profile) => sum + (profile.years_of_experience || 0),
+    0
+  );
+};
+
+/**
  * Fetches and sanitizes the spoken languages data from the "profiles" table.
  * @returns An array of objects with language labels and their corresponding counts.
  */

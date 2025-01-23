@@ -40,7 +40,9 @@ export const columns: ColumnDef<Profile>[] = [
     accessorKey: "experience_level",
     header: "Experience Level",
     cell: ({ row }) => (
-      <span className="font-bold">{row.original.experience_level}</span>
+      <span className="flex justify-center font-bold">
+        {row.original.experience_level}
+      </span>
     ),
   },
   {

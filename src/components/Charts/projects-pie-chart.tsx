@@ -15,16 +15,19 @@ export default function ProjectsPieChart() {
     return chartData.length;
   }, [chartData]);
 
+  const totalEmployees = useMemo(() => {
+    return chartData.reduce((sum, data) => sum + data.value, 0);
+  }, [chartData]);
+
   return (
     <DonutChart
       title="Project Assignments"
       description="Developers per project"
       chartData={chartData}
       totalLabel="Projects"
-      footerText={`Total developers assigned to projects.`}
+      footerText={`${totalEmployees} employees assigned to projects.`}
       chartConfig={chartConfig}
       totalValue={totalProjects}
-      footerParagraph="Showing all projects"
     />
   );
 }
