@@ -50,7 +50,7 @@ export function DeveloperProfileForm() {
         .single();
 
       if (error) {
-        console.error("Error fetching profile:", error);
+        console.error("Error fetching profile:", error.message || error);
       } else if (data) {
         const formData: z.infer<typeof formSchema> = {
           avatar_url:

@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/supabaseServer";
 import EmployeeProfile from "@/components/Profile/employee-profile";
+import { Suspense } from "react";
+import EmployeeProfileSkeleton from "@/components/Profile/employee-profile-skeleton";
 
 export default async function ProfilePage({
   params,
@@ -18,5 +20,9 @@ export default async function ProfilePage({
     return <div>Loading...</div>;
   }
 
-  return <EmployeeProfile profile={data} />;
+  return (
+    <Suspense fallback={<EmployeeProfileSkeleton />}>
+      <EmployeeProfile profile={data} />
+    </Suspense>
+  );
 }

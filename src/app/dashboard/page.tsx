@@ -1,14 +1,5 @@
-"use client";
+import Table from "@/components/Tables";
 
-import DataTable from "@/components/Tables";
-import { TableProvider } from "@/contexts/TableContext";
-
-export default function Page() {
-  return (
-    <div className="p-4">
-      <TableProvider>
-        <DataTable />
-      </TableProvider>
-    </div>
-  );
+export default async function TablePage() {
+  return <Table />;
 }
