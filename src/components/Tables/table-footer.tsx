@@ -35,7 +35,7 @@ export default function TableFooter({
                 value={pageSize.toString()}
                 onValueChange={(value: string) => setPageSize(Number(value))}
               >
-                <SelectTrigger>
+                <SelectTrigger aria-label="Rows per page">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

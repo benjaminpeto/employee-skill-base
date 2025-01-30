@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase/supabaseClient";
 
 import { Icons } from "@/components/Icons";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useSearchParams } from "next/navigation";
 
-export default function SignInPage() {
+function SignInContent() {
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const supabase = createClient();
 
@@ -59,5 +59,13 @@ export default function SignInPage() {
         Sign in with Google
       </Button>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInContent />
+    </Suspense>
   );
 }

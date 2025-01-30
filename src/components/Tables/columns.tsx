@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Profile } from "@/types/profile";
 import { getCountryEmoji } from "../../utils/getCountryEmoji";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { isAvailable } from "@/utils/tableUtils";
 
 export const columns: ColumnDef<Profile>[] = [
   {
@@ -129,14 +130,14 @@ export const columns: ColumnDef<Profile>[] = [
       <span
         className={`inline-block px-3 py-1 rounded-full text-xs ${
           row.original.availability
-            ? "text-green-700 bg-green-200 border border-green-700"
-            : "text-red-700 bg-red-200 border border-red-700"
+            ? "text-green-700 bg-green-100 border border-green-700"
+            : "text-red-700 bg-red-100 border border-red-700"
         }`}
       >
         {row.original.availability ? "Available" : "Unavailable"}
       </span>
     ),
-    filterFn: "isAvailable",
+    filterFn: isAvailable as unknown as ColumnDef<Profile>["filterFn"],
     meta: {
       filterVariant: "select",
     },
