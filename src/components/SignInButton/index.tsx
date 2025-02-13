@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/supabaseClient";
+import { useSearchParams } from "next/navigation";
 
 import { Icons } from "@/components/Icons";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { useSearchParams } from "next/navigation";
 
 export default function SignInButton() {
   const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
@@ -22,7 +22,7 @@ export default function SignInButton() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback${
+          redirectTo: `${window.location.origin}/auth/v1/callback${
             next ? `?next=${encodeURIComponent(next)}` : ""
           }`,
         },
@@ -31,8 +31,8 @@ export default function SignInButton() {
       if (error) {
         throw error;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.error("Error logging in with Google:", error);
       toast({
         title: "Please try again.",
         description: "There was an error logging in with Google.",
